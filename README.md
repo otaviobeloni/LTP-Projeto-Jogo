@@ -10,14 +10,14 @@ personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final
 
 ## 2. Fluxo de Utilização Esperado para o Sistema
 
-  1. Menu inicial
+  1. **Menu inicial**
 
       *Ao iniciar o programa (Overtale) o usuário irá se deparar com um simples menu onde poderá escolher entre:*
      
       - `1. Iniciar Jogo`
       - `2. Sair` (Encerra a execução do programa).
       
-  3. Escolha de classes
+  3. **Escolha de classes**
 
       *Caso o usuário escolha iniciar o jogo o sistema apresentará um menu de classes, contendo:*
      
@@ -27,7 +27,7 @@ personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final
         
      *(A escolha de classes determinará os status do jogador, como a Vida, Mana, Ataque e Defesa).*
 
-  4. Jogabilidade
+  4. **Jogabilidade**
      
      *Depois da escolha de classes o jogo será introduzido ao usuário*
       ```Markdonw
