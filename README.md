@@ -64,4 +64,107 @@ personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final
 
 ## 4. Estrutura de Dados
 
+O sistema utilizará estruturas de dados heterogêneas (`struct`) para organizar as informações dos principais elementos do jogo. As estruturas serão utilizadas para representar o personagem do jogador, os inimigos, os itens e as salas presentes na dungeon.
+
+### 4.1 Estrutura do Jogador
+
+A estrutura `Jogador` será responsável por armazenar as informações referentes ao personagem controlado pelo usuário.
+
+```c
+typedef struct {
+    char nome[50];
+    char classe[20];
+    int vida;
+    int mana;
+    int ataque;
+    int defesa;
+    int nivel;
+    int experiencia;
+    int ouro;
+} Jogador;
+```
+
+Os principais dados armazenados serão:
+
+* `nome`: nome escolhido para o personagem;
+* `classe`: classe escolhida pelo jogador, podendo ser Guerreiro, Mago ou Arqueiro;
+* `vida`: quantidade de pontos de vida do personagem;
+* `mana`: quantidade de mana disponível para utilizar habilidades;
+* `ataque`: poder de ataque do personagem;
+* `defesa`: capacidade de defesa contra ataques dos inimigos;
+* `nivel`: nível atual do personagem;
+* `experiencia`: quantidade de experiência acumulada;
+* `ouro`: quantidade de ouro obtida durante o jogo.
+
+### 4.2 Estrutura dos Inimigos
+
+A estrutura `Inimigo` será utilizada para armazenar as informações dos inimigos encontrados durante a exploração das salas.
+
+```c
+typedef struct {
+    char nome[50];
+    int nivel;
+    int vida;
+    int ataque;
+    int defesa;
+    int experiencia;
+} Inimigo;
+```
+
+Os principais dados armazenados serão:
+
+* `nome`: nome ou tipo do inimigo, como Zumbi ou Esqueleto;
+* `nivel`: nível do inimigo;
+* `vida`: quantidade de pontos de vida;
+* `ataque`: poder de ataque do inimigo;
+* `defesa`: capacidade de defesa;
+* `experiencia`: quantidade de experiência recebida pelo jogador ao derrotá-lo.
+
+O Boss utilizará a mesma estrutura `Inimigo`, porém possuirá atributos maiores, como maior quantidade de vida, ataque e defesa.
+
+### 4.3 Estrutura dos Itens
+
+A estrutura `Item` será utilizada para armazenar as informações dos itens encontrados ou obtidos durante o jogo.
+
+```c
+typedef struct {
+    char nome[50];
+    char tipo[30];
+    int efeito;
+    int quantidade;
+} Item;
+```
+
+Os principais dados armazenados serão:
+
+* `nome`: nome do item;
+* `tipo`: função ou categoria do item, como recuperação de vida ou aumento de ataque;
+* `efeito`: valor do efeito causado pelo item;
+* `quantidade`: quantidade disponível daquele item.
+
+Entre os possíveis itens estarão poções e itens capazes de aumentar o ataque do jogador.
+
+### 4.4 Estrutura das Salas
+
+A estrutura `Sala` será utilizada para representar as salas presentes na dungeon e suas características.
+
+```c
+typedef struct {
+    int numero;
+    int possui_inimigo;
+    int possui_recompensa;
+    int eh_boss;
+} Sala;
+```
+
+Os principais dados armazenados serão:
+
+* `numero`: número ou identificação da sala;
+* `possui_inimigo`: indica se existe um inimigo na sala;
+* `possui_recompensa`: indica se a sala possui alguma recompensa;
+* `eh_boss`: indica se a sala é a sala final onde ocorrerá a batalha contra o Boss.
+
+Dessa forma, as estruturas de dados permitirão organizar as informações necessárias para o funcionamento do jogo, incluindo o personagem do jogador, os inimigos, os itens, as salas, os combates e a progressão dentro da dungeon.
+
+
 ```c
