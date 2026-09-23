@@ -14,8 +14,8 @@ personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final
 
       *Ao iniciar o programa (Overtale) o usuário irá se deparar com um simples menu onde poderá escolher entre:*
      
-      - `1. Iniciar Jogo`
-      - `2. Sair` (Encerra a execução do programa).
+      - `1.` **Iniciar Jogo**
+      - `2.` **Sair** *(Encerra a execução do programa).*
       
   3. **Escolha de classes**
 
