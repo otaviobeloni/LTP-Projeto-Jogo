@@ -165,6 +165,3 @@ Os principais dados armazenados serão:
 * `eh_boss`: indica se a sala é a sala final onde ocorrerá a batalha contra o Boss.
 
 Dessa forma, as estruturas de dados permitirão organizar as informações necessárias para o funcionamento do jogo, incluindo o personagem do jogador, os inimigos, os itens, as salas, os combates e a progressão dentro da dungeon.
-
-
-```c
