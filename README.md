@@ -44,7 +44,8 @@ personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final
       Nessa sala, o jogador terá 3 opções, sendo elas:
              1- Atacar
              2- Usar item (essa opção irá abrir um menu, contendo todos os itens e seus respectivos números e uma opção de voltar.)
-             3- Fugir
+             3- Recuar (essa opção faz o jogador recuperar bastante vida e esquivar de um golpe inimigo,
+                porém é uma opção com baixa taxa de êxito e só deve ser utilizada em ultimos casos).  
            
       Como o jogo será um RPG de turnos, após a escolha do jogador, o inimigo irá atacar o mesmo, porém, caso o jogador derrote o oponente,
       o usuário avançará de sala. Esse processo vai se repetir ao longo de todo o jogo até a fase do boss (fase final), ao menos que a vida do
