@@ -11,6 +11,8 @@
 ---
 
 ## 3. Fluxograma da Lógica do Sistema
+<img width="890" height="935" alt="Fluxograma (Overtale RPG) " src="https://github.com/user-attachments/assets/a13ad353-8c79-40c8-a6bd-99de773fe683" />
+
 
 
 ---
