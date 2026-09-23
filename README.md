@@ -1,2 +1,20 @@
-# LTP-Projeto-Jogo
-Repositório dedicado ao projeto da disciplina de LTP onde o objetivo será desenvolver um jogo em linguagem C
+# Overtale
+
+## 1. Descrição do Sistema
+
+
+---
+
+## 2. Fluxo de Utilização Esperado para o Sistema
+
+
+---
+
+## 3. Fluxograma da Lógica do Sistema
+
+
+---
+
+## 4. Estrutura de Dados
+
+```c
