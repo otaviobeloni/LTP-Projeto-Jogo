@@ -1,7 +1,7 @@
 # Overtale
 
 ## 1. Descrição do Sistema
-O projeto consiste em um video game, do gênero RPG (Role Playing Game) e *Dungeon crawler*. No game, o jogador escolherá entre três classes jogáveis, O Guerreiro, O Mago e A Arqueira; cada um com acesso a
+O projeto consiste em um video game, do gênero RPG (Role Playing Game) e *Dungeon crawler*. No game, o jogador escolherá entre três classes jogáveis, O Cavaleiro, O Mago e A Arqueira; cada um com acesso a
 ataques, habilidades e itens diferentes, além de favorecerem um estilo de jogo único. A gameplay se baseia no jogador controlar seu personagem através de salas, contendo inimigos e possívelmente recompensas para o
 personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final do jogo. O game utilizará arquivos de save em binário, para restaurar o estado do jogo e permitir que o jogador salve seu progresso em pontos específicos, e estruturas de dados para guardar informações sobre o personagem do Jogador e NPCs (Non Playable Characters).
 
@@ -21,9 +21,9 @@ personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final
 
       *Caso o usuário escolha iniciar o jogo o sistema apresentará um menu de classes, contendo:*
      
-      - `1.` **Guerreiro**
+      - `1.` **Cavaleiro**
       - `2.` **Mago**    
-      - `3.` **Arqueiro**
+      - `3.` **Arqueira**
         
      *(A escolha de classes determinará os status do jogador, como a Vida, Mana, Ataque e Defesa).*
 
@@ -72,29 +72,32 @@ A estrutura `Jogador` será responsável por armazenar as informações referent
 
 ```c
 typedef struct {
-    char nome[50];
-    char classe[20];
-    int vida;
-    int mana;
-    int ataque;
-    int defesa;
-    int nivel;
-    int experiencia;
-    int ouro;
-} Jogador;
+	char classe[20];
+	int vida_max;
+	int vida_atual;
+	int ATK;
+	int DEF;
+	int PER;
+	int mana_max;
+	int mana_atual;
+	int ouro;	
+	int quant_chaves;
+	int ataca_longa_dist;
+} Player;
 ```
 
 Os principais dados armazenados serão:
 
-* `nome`: nome escolhido para o personagem;
-* `classe`: classe escolhida pelo jogador, podendo ser Guerreiro, Mago ou Arqueiro;
-* `vida`: quantidade de pontos de vida do personagem;
-* `mana`: quantidade de mana disponível para utilizar habilidades;
-* `ataque`: poder de ataque do personagem;
-* `defesa`: capacidade de defesa contra ataques dos inimigos;
-* `nivel`: nível atual do personagem;
-* `experiencia`: quantidade de experiência acumulada;
-* `ouro`: quantidade de ouro obtida durante o jogo.
+
+* `classe`: classe escolhida pelo jogador, podendo ser Cavaleiro, Mago ou Arqueira;
+* `vida_max e vida_atual`: quantidade de pontos de vida do personagem máximos e atual;
+* `ATK`: poder de ataque do personagem;
+* `DEF`: capacidade de defesa contra ataques dos inimigos;
+* `PER`: Percepção do personagem para detectar armadilhas, inimigos escondidos, etc;
+* `mana_max e mana_atual`: quantidade de mana máxima e atual para utilizar habilidades;
+* `ouro`: quantidade de ouro obtida durante o jogo;
+* `quant_chaves`: quantas chaves o jogador está carregando;
+* `ataca_longa_dist`: Se o jogador tem a capacidade de atacar a longa distância ou não;
 
 ### 4.2 Estrutura dos Inimigos
 
