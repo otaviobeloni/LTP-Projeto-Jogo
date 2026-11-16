@@ -3,6 +3,7 @@
 #include <string.h>
 #include <windows.h>
 
+#define MAX_SALAS 20
 
 typedef struct {
 	char classe[20];
@@ -19,14 +20,19 @@ typedef struct {
 } Player;
 
 typedef struct {
+	char sala_nome[50];
 	int numero;
     int possui_inimigo;
     int possui_recompensa;
+    int possui_armadilha;
     int eh_boss;
 } Sala;
 
 typedef struct {
 	Player player;
+	Sala salas[MAX_SALAS];
+	
+	int sala_atual;
 } Save;
 
 void salvar_jogo(Save *save)
@@ -171,6 +177,19 @@ void mostrar_status(Save *save) {
     printf("Mana: %d/%d\n", save->player.mana_atual, save->player.mana_max);
     printf("Ouro: %d\n", save->player.ouro);
     printf("Chaves: %d\n", save->player.quant_chaves);
+    
+    printf("\nVoce atualmente esta na sala %d, chamada de %s", save->sala_atual, save->salas[save->sala_atual].sala_nome);
+}
+
+void inicializar_sala(Sala *sala, int numero, char nome[]) {
+
+    strcpy(sala->sala_nome, nome);
+
+    sala->numero = numero;
+    sala->possui_inimigo = 0;
+    sala->possui_recompensa = 0;
+    sala->possui_armadilha = 0;
+    sala->eh_boss = 0;
 }
 
 void menu_principal() {
@@ -200,9 +219,23 @@ int main(int argc, char *argv[]) {
 		switch(opcao) {
         case 1:
             selecionar_classe(&save.player);
-            salvar_jogo(&save);
-            mostrar_status(&save.player);
-            rodando = 0;
+
+		    // Inicializando a primeira sala
+		    strcpy(save.salas[0].sala_nome, "A Primeira Sala");
+		    save.salas[0].numero = 0;
+		    save.salas[0].possui_inimigo = 0;
+		    save.salas[0].possui_recompensa = 1;
+		    save.salas[0].possui_armadilha = 0;
+		    save.salas[0].eh_boss = 0;
+
+		    // Definindo a sala atual
+		    save.sala_atual = 0;
+		
+		    // Salvando todos os dados
+		    salvar_jogo(&save);
+		
+		    mostrar_status(&save);
+		    rodando = 0;
         break;
 
         case 2:
@@ -210,7 +243,7 @@ int main(int argc, char *argv[]) {
                 printf("Nao foi possivel carregar o jogo.\n");
                 return 0;
             } else {
-            	mostrar_status(&save.player);
+            	mostrar_status(&save);
             	rodando = 0;
 			}
         break;
