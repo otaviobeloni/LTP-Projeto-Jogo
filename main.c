@@ -21,6 +21,48 @@ typedef struct {
     int dacio_sword;
 } Player;
 
+// Struct Inimigos
+
+typedef struct {
+    char inmg[20];
+    int vida_max_inmg;
+    int vida_atual_inmg;
+    int ATK_inmg;
+} Inimigo;
+
+// Qual inimigo
+
+void tipoinimigo (Inimigo *inimigo, char nome_inmg[]){
+
+    if (strcmp(nome_inmg, "Esqueleto") == 0){
+        strcpy(inimigo->inmg, "Esqueleto");
+        inimigo->vida_max_inmg = 20;
+        inimigo->vida_atual_inmg = 20;
+        inimigo->ATK_inmg = 5;
+    }
+
+    else if (strcmp(nome_inmg, "Goblin") == 0){
+        strcpy(inimigo->inmg, "Goblin");
+        inimigo->vida_max_inmg = 30;
+        inimigo->vida_atual_inmg = 30;
+        inimigo->ATK_inmg = 3;
+    }
+
+    else if (strcmp(nome_inmg, "Zumbi") == 0){
+        strcpy(inimigo->inmg, "Zumbi");
+        inimigo->vida_max_inmg = 50;
+        inimigo->vida_atual_inmg = 50;
+        inimigo->ATK_inmg = 7;
+    }
+
+    else if (strcmp(nome_inmg, "Boss") == 0){
+        strcpy(inimigo->inmg, "Boss");
+        inimigo->vida_max_inmg = 100;
+        inimigo->vida_atual_inmg = 100;
+        inimigo->ATK_inmg = 12;
+    }
+}
+
 typedef struct {
     char sala_nome[50];
     int numero;
