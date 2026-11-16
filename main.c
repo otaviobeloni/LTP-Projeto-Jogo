@@ -316,7 +316,7 @@ void mostrar_sala(Save *save) {
 
         case 1:
             printf("\n========================================\n");
-            printf("              SEGUNDA SALA\n");
+            printf("              PRIMEIRA SALA\n");
             printf("========================================\n\n");
 
             escrever_lento("Voce atravessa a passagem e chega a uma sala escura.\n", 35);
