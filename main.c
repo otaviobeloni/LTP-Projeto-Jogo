@@ -3,7 +3,7 @@
 #include <string.h>
 #include <windows.h>
 
-#define MAX_SALAS 2
+#define MAX_SALAS 6
 #define PRECO_CHAVE 5
 
 typedef struct {
