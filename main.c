@@ -208,7 +208,8 @@ void menu_principal() {
 int main(int argc, char *argv[]) {
     Save save;
     int opcao, rodando;
-    
+
+	Save save = {0}
     rodando = 1;
 
 	menu_principal();
