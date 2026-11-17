@@ -134,6 +134,50 @@ void atacar_inmg (Player *player, Inimigo *inimigo){
     
 }
 
+// Combate
+
+void combate (Player *player, Inimigo *inimigo){
+	
+	int opcao;
+	
+	while(player->vida_atual > 0 && inimigo->vida_atual_inmg > 0){
+		
+		printf("\n========== COMBATE ==========\n");
+        printf("1 - Atacar\n");
+        printf("2 - Usar pocao\n");
+        printf("=============================\n");
+		printf("> ");
+		scanf("%d", &opcao);
+		
+		switch(opcao){
+			
+			case 1:
+				ataque_plyr(player, inimigo);
+				
+				if(inimigo->vida_atual_inmg > 0){
+					ataque_inmg(player, inimigo);
+				}
+				break;
+				
+			case 2:
+				// Função poção
+				break;
+				
+			default:
+				printf("Opcao Invalida!");
+				break;
+		}	
+	}
+	
+	if(player->vida_atual <= 0){
+		printf("\nVoce foi Derrotado!\n");
+	}
+	
+	if(inimigo->vida_atual_inmg <= 0){
+		printf("\nVocê derrotou o inimigo\n");
+	}
+}
+
 // Limpar resto de entradas
 
 void limpar_buffer() {
