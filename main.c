@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -167,7 +168,20 @@ void easter_egg(Player *player) {
         printf("       EASTER EGG DESCOBERTO!\n");
         printf("====================================\n");
 
-        printf("Voce encontrou a DACIO SWORD!\n");
+        printf("\nVoce encontrou a DACIO SWORD!\n\n");
+
+        printf(
+            "             /\\\n"
+            "            /  \\\n"
+            "            |  |\n"
+            "            |  |\n"
+            "            |  |\n"
+            "         ___|  |___\n"
+            "            |  |\n"
+            "            |  |\n"
+            "            |__|\n\n"
+        );
+
         printf("Sua arma recebeu +999 de dano!\n");
 
         player->ATK += 999;
@@ -401,7 +415,58 @@ void loja_bau(Save *save) {
                 save->salas[3].bau_aberto = 1;
 
                 printf("\nVoce utilizou uma chave e abriu o bau!\n");
-                printf("O interior do bau ainda precisa ser explorado...\n");
+                printf("\nDentro do bau, voce encontrou um equipamento especial!\n");
+
+                if (strcmp(save->player.classe, "Cavaleiro") == 0) {
+                    printf("\nVoce encontrou uma ESPADA DE GUERRA!\n\n");
+
+                    printf(
+                        "             /\\\n"
+                        "            /  \\\n"
+                        "            |  |\n"
+                        "            |  |\n"
+                        "            |  |\n"
+                        "         ___|  |___\n"
+                        "            |  |\n"
+                        "            |  |\n"
+                        "            |__|\n\n"
+                    );
+
+                    printf("ATK +5\n");
+                    save->player.ATK += 5;
+                }
+                else if (strcmp(save->player.classe, "Mago") == 0) {
+                    printf("\nVoce encontrou um CAJADO DE DESTRUICAO!\n\n");
+
+                    printf(
+                        "              *\n"
+                        "             /|\\\n"
+                        "              |\n"
+                        "              |\n"
+                        "              |\n"
+                        "              |\n"
+                        "              |\n"
+                        "             / \\\n\n"
+                    );
+
+                    printf("ATK +5\n");
+                    save->player.ATK += 5;
+                }
+                else if (strcmp(save->player.classe, "Arqueira") == 0) {
+                    printf("\nVoce encontrou um ARCO DE CACADA!\n\n");
+
+                    
+					printf(
+					    "             ) | \n"
+					    "            )  | \n"
+					    "           )   | \n"
+					    "            )  | \n"
+					    "             ) | \n\n"
+					);
+
+                    printf("ATK +5\n");
+                    save->player.ATK += 5;
+                }
             }
             else {
                 printf("\nVoce precisa de uma chave para abrir o bau!\n");
