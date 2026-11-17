@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <windows.h>
 
 #define MAX_SALAS 6
@@ -82,6 +83,41 @@ typedef struct {
     Sala salas[MAX_SALAS];
     int sala_atual;
 } Save;
+
+// Escrever lento
+
+void escrever_lento(const char *formato, int atraso, ...) {
+
+    char texto[500];
+    int i;
+
+    va_list args;
+
+    va_start(args, atraso);
+
+    vsnprintf(texto, sizeof(texto), formato, args);
+
+    va_end(args);
+
+    i = 0;
+
+    while (texto[i] != '\0') {
+
+        printf("%c", texto[i]);
+        fflush(stdout);
+        Sleep(atraso);
+
+        i++;
+    }
+}
+
+// Limpar resto de entradas
+
+void limpar_buffer() {
+    int c;
+
+    while ((c = getchar()) != '\n' && c != EOF);
+}
 
 // Ataque player
 
@@ -187,7 +223,6 @@ void combate (Player *player, Inimigo *inimigo){
 	}
 }
 
-
 // Sistema de save
 
 void salvar_jogo(Save *save) {
@@ -233,29 +268,6 @@ int carregarJogo(Save *save) {
 
     return 1;
 }
-
-// Escrever lento
-
-void escrever_lento(const char *formato, int atraso, ...) {
-
-    char texto[500];
-
-    va_list args;
-
-    va_start(args, atraso);
-
-    vsnprintf(texto, sizeof(texto), formato, args);
-
-    va_end(args);
-
-    while (*texto) {
-        printf("%c", *texto);
-        fflush(stdout);
-        Sleep(atraso);
-        texto++;
-    }
-}
-
 
 // Easter egg
 
