@@ -219,7 +219,9 @@ void combate (Player *player, Inimigo *inimigo){
 	}
 	
 	if(inimigo->vida_atual_inmg <= 0){
-		printf("\nVocê derrotou o inimigo\n");
+		printf("\nVoce derrotou o inimigo\n");
+		printf("Voce ganhou 3 de ouro!");
+		player->ouro+=3;
 	}
 }
 
@@ -620,7 +622,10 @@ void mostrar_sala(Save *save) {
             primeira_sala(save);
             break;
 
-        case 1:
+        case 1:{
+		
+        	Inimigo inimigo;
+        	
             printf("\n========================================\n");
             printf("              PRIMEIRA SALA\n");
             printf("========================================\n\n");
@@ -629,9 +634,18 @@ void mostrar_sala(Save *save) {
             escrever_lento("O chao esta coberto de poeira e restos de antigas batalhas.\n", 35);
             escrever_lento("Algo parece estar se movimentando nas sombras...\n\n", 35);
             escrever_lento("Prepare-se. Voce nao esta sozinho aqui.\n", 35);
+            
+            escrever_lento("\nUm goblin surge das sombras!\n", 35);
+            
+            tipoinimigo(&inimigo, "Goblin");
+    		combate(&save->player, &inimigo);
+    		
             break;
-
-        case 2:
+		}	
+		
+        case 2:{
+        	Inimigo inimigo;
+        	
             printf("\n========================================\n");
             printf("          SEGUNDA SALA\n");
             printf("========================================\n\n");
@@ -640,9 +654,17 @@ void mostrar_sala(Save *save) {
             escrever_lento("Esta sala parece tranquila, mas ha algo estranho no ambiente.\n", 35);
             escrever_lento("O chao apresenta marcas e algumas partes parecem instaveis.\n\n", 35);
             escrever_lento("Tenha cuidado ao avancar...\n", 35);
-            break;
+            
+            escrever_lento("\nUm esqueleto aparece diante de voce!\n", 35);
 
+    		tipoinimigo(&inimigo, "Esqueleto");
+    		combate(&save->player, &inimigo);
+    		
+            break;
+		}
+			
         case 3:
+        	
             printf("\n========================================\n");
             printf("                LOJA\n");
             printf("========================================\n\n");
@@ -653,9 +675,12 @@ void mostrar_sala(Save *save) {
             escrever_lento("Talvez exista algo valioso guardado la dentro...\n", 35);
 
             loja_bau(save);
+            
             break;
 
-        case 4:
+        case 4:{
+        	Inimigo inimigo;
+        	
             printf("\n========================================\n");
             printf("             TERCEIRA SALA\n");
             printf("========================================\n\n");
@@ -664,9 +689,25 @@ void mostrar_sala(Save *save) {
             escrever_lento("Ao entrar, percebe que a sala e muito maior que as anteriores.\n", 35);
             escrever_lento("De repente, dois inimigos surgem diante de voce!\n\n", 35);
             escrever_lento("Prepare-se...\n", 35);
-            break;
 
-        case 5:
+			tipoinimigo(&inimigo, "Zumbi");
+			combate(&save->player, &inimigo);
+
+			if (save->player.vida_atual > 0) {
+
+    			escrever_lento("\n\nO zumbi cai ao chao, mas voce nao tem tempo para descansar...\n", 35);
+    			escrever_lento("Um goblin surge das sombras, pronto para atacar!\n\n", 35);
+
+    			tipoinimigo(&inimigo, "Goblin");
+    			combate(&save->player, &inimigo);
+			}
+                    
+            break;
+		}
+		
+        case 5:{
+        	Inimigo inimigo;
+        	
             printf("\n========================================\n");
             printf("               ??? SALA ???\n");
             printf("========================================\n\n");
@@ -676,8 +717,13 @@ void mostrar_sala(Save *save) {
             escrever_lento("No centro da sala, uma criatura gigantesca aguarda sua chegada.\n\n", 35);
             escrever_lento("O CHEFE DA MASMORRA despertou!\n", 50);
             escrever_lento("Prepare-se para a batalha final...\n", 50);
+            
+            tipoinimigo(&inimigo, "Boss");
+    		combate(&save->player, &inimigo);
+    		
             break;
-    }
+    	}
+}
 
     save->salas[save->sala_atual].visitada = 1;
     salvar_jogo(save);
