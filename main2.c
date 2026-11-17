@@ -227,13 +227,13 @@ int calcular_dano(int ataque) {
     int dano = ataque + variacao;
 
     if (dano < 1) {
-    	escrever_lento("Golpe pessimo! Dano minimo...", 20);
+        escrever_lento("Golpe pessimo! Dano minimo...", 20);
         dano = 1;
     }
 
     if (variacao == 5) {
         escrever_lento("ACERTO CRITICO! DANO DOBRADO!\n", 20);
-		dano = dano + dano;
+        dano = dano + dano;
     }
 
     return dano;
@@ -244,21 +244,21 @@ int calcular_dano(int ataque) {
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
 
-	int dano = calcular_dano(player->ATK);
+    int dano = calcular_dano(player->ATK);
 
-	inimigo->vida_atual_inmg -= dano;
+    inimigo->vida_atual_inmg -= dano;
 
-	if(inimigo->vida_atual_inmg < 0){
-		inimigo->vida_atual_inmg = 0;
-	}
+    if(inimigo->vida_atual_inmg < 0){
+        inimigo->vida_atual_inmg = 0;
+    }
 
-	printf("\n=============================\n");
+    printf("\n=============================\n");
 
     escrever_lento("Voce atacou o %s!\n",20 ,inimigo->inmg);
     escrever_lento("O ataque causou %d pontos de dano\n",20 ,dano);
     escrever_lento("Vida do inimigo: %d/%d\n",20
-	,inimigo->vida_atual_inmg,
-	inimigo->vida_max_inmg);
+    ,inimigo->vida_atual_inmg,
+    inimigo->vida_max_inmg);
 
     printf("=============================\n");
 
@@ -268,24 +268,25 @@ void ataque_plyr (Player *player, Inimigo *inimigo){
 
 void ataque_inmg (Player *player, Inimigo *inimigo){
 
-	int dano = calcular_dano(inimigo->ATK_inmg) - player->DEF;
+    int dano = calcular_dano(inimigo->ATK_inmg) - player->DEF;
 
-	if (dano<0) dano = 0;
+    if (dano<0) dano = 0;
 
-	player -> vida_atual -= dano;
+    player -> vida_atual -= dano;
 
-	if(player->vida_atual < 0){
-		player->vida_atual = 0;
-	}
+    if(player->vida_atual < 0){
+        player->vida_atual = 0;
+    }
 
-	printf("\n=============================\n");
+    printf("\n=============================\n");
 
     escrever_lento("O %s te atacou!\n",20 ,inimigo->inmg);
-    escrever_lento("O Ataque causou %d pontos de dano\n",20 ,dano);
-    escrever_lento("Sua vida: %d/%d\n",20 
-	,player->vida_atual,
-	player->vida_max);
-	escrever_lento("Sua defesa: %d\n",20 ,player->DEF);
+    escrever_lento("O Ataque causou %d pontos de dano\n",20
+    ,dano);
+    escrever_lento("Sua vida: %d/%d\n",20
+    ,player->vida_atual,
+    player->vida_max);
+    escrever_lento("Sua defesa: %d\n",20 ,player->DEF);
 
     printf("=============================\n");
 
@@ -350,7 +351,6 @@ int combate(Save *save, Inimigo *inimigo) {
 // Armadilha
 
 int executar_armadilha(Save *save) {
-
     Player *player = &save->player;
     int dano;
 
@@ -361,16 +361,13 @@ int executar_armadilha(Save *save) {
     escrever_lento("Voce avanca pela sala, mas algo parece estranho...\n", 35);
     escrever_lento("De repente, o chao comeca a ceder sob seus pes!\n\n", 35);
 
-    // Verifica se o jogador possui percepcao suficiente
     if (player->PER >= 3) {
-
         escrever_lento("Seus reflexos permitem identificar a armadilha!\n", 35);
         escrever_lento("Voce consegue saltar para tras e escapar ileso!\n", 35);
 
         return 2;
     }
 
-    // Jogador caiu na armadilha
     escrever_lento("Voce nao conseguiu perceber o perigo a tempo!\n", 35);
     escrever_lento("Uma armadilha escondida foi ativada!\n\n", 35);
 
@@ -388,11 +385,8 @@ int executar_armadilha(Save *save) {
 
     escrever_lento("A armadilha causou %d pontos de dano!\n", 35, dano);
 
-    printf("\nSua vida: %d/%d\n",
-           player->vida_atual,
-           player->vida_max);
+    printf("\nSua vida: %d/%d\n", player->vida_atual, player->vida_max);
 
-    // Verifica se o jogador morreu
     if (player->vida_atual <= 0) {
         return game_over(save);
     }
@@ -443,7 +437,7 @@ void easter_egg(Player *player) {
         printf("\nVoce ja possui a DACIO SWORD!\n");
     }
     else {
-    	escrever_lento("...\n", 1000);
+        escrever_lento("...\n", 1000);
         escrever_lento("\nNada aconteceu...\n", 50);
     }
 }
@@ -462,6 +456,9 @@ void primeira_sala(Save *save) {
     escrever_lento("Parece que alguem deixou uma mensagem escondida...\n\n", 35);
 
     easter_egg(&save->player);
+
+    printf("\nPressione ENTER para continuar...");
+    getchar();
 
     printf("\n----------------------------------------\n");
 
@@ -587,7 +584,7 @@ void mostrar_status(Save *save) {
 
 // Inicializar sala
 
-void inicializar_sala(Sala *sala, int numero, char nome[]) {
+void inicializar_sala(Sala *sala, int numero, const char *nome) {
     strcpy(sala->sala_nome, nome);
 
     sala->numero = numero;
@@ -886,9 +883,8 @@ void executar_jogo(Save *save) {
 
         mostrar_sala(save);
 
-        // Verifica se a sala possui armadilha
+        // Verifica se a sala possui armadilha.
         if (save->salas[save->sala_atual].possui_armadilha == 1) {
-
             resultado = executar_armadilha(save);
 
             if (resultado == 0) {
