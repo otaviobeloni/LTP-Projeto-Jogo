@@ -3,7 +3,7 @@
 #include <string.h>
 #include <windows.h>
 
-#define MAX_SALAS 6
+#define MAX_SALAS 4
 #define PRECO_CHAVE 5
 
 typedef struct {
@@ -343,6 +343,78 @@ void configurar_salas(Save *save) {
     inicializar_sala(&save->salas[1], 2, "Primeiro Combate");
     save->salas[1].possui_inimigo = 1;
     save->salas[1].quantidade_inimigos = 1;
+
+    inicializar_sala(&save->salas[2], 3, "Sala da Armadilha");
+    save->salas[2].possui_inimigo = 1;
+    save->salas[2].quantidade_inimigos = 1;
+    save->salas[2].possui_armadilha = 1;
+
+    inicializar_sala(&save->salas[3], 4, "Loja e Bau");
+    save->salas[3].possui_bau = 1;
+}
+
+
+// Loja e Bau
+
+void loja_bau(Save *save) {
+    int opcao;
+
+    while (1) {
+        printf("\n========================================\n");
+        printf("                LOJA E BAU\n");
+        printf("========================================\n");
+
+        printf("\nOuro: %d", save->player.ouro);
+        printf("\nChaves: %d\n", save->player.quant_chaves);
+
+        printf("\n1 - Comprar uma chave (%d ouros)\n", PRECO_CHAVE);
+        printf("2 - Abrir o bau\n");
+        printf("3 - Sair da loja\n");
+
+        printf("\n> ");
+
+        if (scanf("%d", &opcao) != 1) {
+            printf("\nEntrada invalida!\n");
+            limpar_buffer();
+            continue;
+        }
+
+        limpar_buffer();
+
+        if (opcao == 1) {
+            if (save->player.ouro >= PRECO_CHAVE) {
+                save->player.ouro -= PRECO_CHAVE;
+                save->player.quant_chaves++;
+
+                printf("\nVoce comprou uma chave!\n");
+            }
+            else {
+                printf("\nVoce nao possui ouro suficiente!\n");
+            }
+        }
+        else if (opcao == 2) {
+            if (save->salas[3].bau_aberto == 1) {
+                printf("\nO bau ja foi aberto!\n");
+            }
+            else if (save->player.quant_chaves > 0) {
+                save->player.quant_chaves--;
+                save->salas[3].bau_aberto = 1;
+
+                printf("\nVoce utilizou uma chave e abriu o bau!\n");
+                printf("O interior do bau ainda precisa ser explorado...\n");
+            }
+            else {
+                printf("\nVoce precisa de uma chave para abrir o bau!\n");
+            }
+        }
+        else if (opcao == 3) {
+            printf("\nVoce deixou a loja para tras.\n");
+            break;
+        }
+        else {
+            printf("\nOpcao invalida!\n");
+        }
+    }
 }
 
 
@@ -366,6 +438,30 @@ void mostrar_sala(Save *save) {
             escrever_lento("Algo parece estar se movimentando nas sombras...\n\n", 35);
             escrever_lento("Prepare-se. Voce nao esta sozinho aqui.\n", 35);
             break;
+
+        case 2:
+            printf("\n========================================\n");
+            printf("          SEGUNDA SALA\n");
+            printf("========================================\n\n");
+
+            escrever_lento("Apos deixar a primeira batalha para tras, voce encontra uma nova passagem.\n", 35);
+            escrever_lento("Esta sala parece tranquila, mas ha algo estranho no ambiente.\n", 35);
+            escrever_lento("O chao apresenta marcas e algumas partes parecem instaveis.\n\n", 35);
+            escrever_lento("Tenha cuidado ao avancar...\n", 35);
+            break;
+
+        case 3:
+            printf("\n========================================\n");
+            printf("                LOJA\n");
+            printf("========================================\n\n");
+
+            escrever_lento("Voce encontra uma sala diferente das anteriores.\n", 35);
+            escrever_lento("Um comerciante misterioso parece estar esperando por voce.\n", 35);
+            escrever_lento("Ao lado da loja, existe um bau antigo protegido por uma fechadura.\n\n", 35);
+            escrever_lento("Talvez exista algo valioso guardado la dentro...\n", 35);
+
+            loja_bau(save);
+            break;
     }
 
     save->salas[save->sala_atual].visitada = 1;
@@ -385,7 +481,7 @@ void executar_jogo(Save *save) {
 
         if (save->sala_atual == MAX_SALAS - 1) {
             printf("\nVoce chegou ao final desta parte da masmorra!\n");
-            printf("O primeiro combate espera por voce...\n");
+            printf("O proximo desafio espera por voce...\n");
 
             printf("\nPressione ENTER para encerrar...");
             getchar();
