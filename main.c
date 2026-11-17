@@ -85,7 +85,7 @@ typedef struct {
 
 // Ataque player
 
-void atacar_plyr (Player *player, Inimigo *inimigo){
+void ataque_plyr (Player *player, Inimigo *inimigo){
 	
 	int dano = player->ATK;
 	
@@ -97,11 +97,11 @@ void atacar_plyr (Player *player, Inimigo *inimigo){
 	
 	printf("\n=============================\n");
 
-    escrever_lento("Voce atacou o %s!\n",inimigo->inmg, 20);
-    escrever_lento("O dano causou %d pontos de ataque",dano, 20);
-    escrever_lento("Vida do inimigo: %d/%d\n"
+    escrever_lento("Voce atacou o %s!\n",20 ,inimigo->inmg);
+    escrever_lento("O dano causou %d pontos de ataque\n",20 ,dano);
+    escrever_lento("Vida do inimigo: %d/%d\n",20
 	,inimigo->vida_atual_inmg,
-	inimigo->vida_max_inmg, 20);
+	inimigo->vida_max_inmg);
 
     printf("=============================\n");
 	
@@ -109,7 +109,7 @@ void atacar_plyr (Player *player, Inimigo *inimigo){
 
 // Ataque Inimigo
 
-void atacar_inmg (Player *player, Inimigo *inimigo){
+void ataque_inmg (Player *player, Inimigo *inimigo){
 	
 	int dano = inimigo->ATK_inmg - player->DEF;
 	
@@ -123,12 +123,12 @@ void atacar_inmg (Player *player, Inimigo *inimigo){
 	
 	printf("\n=============================\n");
 
-    escrever_lento("O %s te atacou!\n",inimigo->inmg, 20);
-    escrever_lento("O dano causou %d pontos de ataque",dano, 20);
-    escrever_lento("Sua vida: %d/%d\n"
+    escrever_lento("O %s te atacou!\n",20 ,inimigo->inmg);
+    escrever_lento("O dano causou %d pontos de ataque\n",20 ,dano);
+    escrever_lento("Sua vida: %d/%d\n",20 
 	,player->vida_atual,
-	player->vida_max, 20);
-	escrever_lento("Sua defesa: %d",player->DEF);
+	player->vida_max);
+	escrever_lento("Sua defesa: %d",20 ,player->DEF);
 
     printf("=============================\n");
     
