@@ -82,6 +82,56 @@ typedef struct {
     int sala_atual;
 } Save;
 
+// Ataque player
+
+void atacar_plyr (Player *player, Inimigo *inimigo){
+	
+	int dano = player->ATK;
+	
+	inimigo -> vida_atual_inmg -=dano;
+	
+	if(inimigo->vida_atual_inmg < 0){
+		inimigo->vida_atual_inmg = 0;
+	}
+	
+	printf("\n=============================\n");
+
+    escrever_lento("Voce atacou o %s!\n",inimigo->inmg, 20);
+    escrever_lento("O dano causou %d pontos de ataque",dano, 20);
+    escrever_lento("Vida do inimigo: %d/%d\n"
+	,inimigo->vida_atual_inmg,
+	inimigo->vida_max_inmg, 20);
+
+    printf("=============================\n");
+	
+}
+
+// Ataque Inimigo
+
+void atacar_inmg (Player *player, Inimigo *inimigo){
+	
+	int dano = inimigo->ATK_inmg - player->DEF;
+	
+	if (dano<0) dano = 0;
+	
+	player -> vida_atual -= dano;
+	
+	if(player->vida_atual < 0){
+		player->vida_atual = 0;
+	}
+	
+	printf("\n=============================\n");
+
+    escrever_lento("O %s te atacou!\n",inimigo->inmg, 20);
+    escrever_lento("O dano causou %d pontos de ataque",dano, 20);
+    escrever_lento("Sua vida: %d/%d\n"
+	,player->vida_atual,
+	player->vida_max, 20);
+	escrever_lento("Sua defesa: %d",player->DEF);
+
+    printf("=============================\n");
+    
+}
 
 // Limpar resto de entradas
 
