@@ -1,170 +1,199 @@
 # Overtale
 
 ## 1. Descrição do Sistema
-O projeto consiste em um video game, do gênero RPG (Role Playing Game) e *Dungeon crawler*. No game, o jogador escolherá entre três classes jogáveis, O Cavaleiro, O Mago e A Arqueira; cada um com acesso a
-ataques, habilidades e itens diferentes, além de favorecerem um estilo de jogo único. A gameplay se baseia no jogador controlar seu personagem através de salas, contendo inimigos e possívelmente recompensas para o
-personagem, até chegar na sala final contento o Chefão (Boss), o inimigo final do jogo. O game utilizará arquivos de save em binário, para restaurar o estado do jogo e permitir que o jogador salve seu progresso em pontos específicos, e estruturas de dados para guardar informações sobre o personagem do Jogador e NPCs (Non Playable Characters).
 
+O projeto consiste no desenvolvimento de um jogo eletrônico do gênero RPG (*Role-Playing Game*) e *Dungeon Crawler*, utilizando a linguagem de programação C.
+
+No jogo, o jogador poderá escolher entre três classes jogáveis: **Cavaleiro, Mago e Arqueira**. Cada classe possui atributos próprios, como pontos de vida, ataque, defesa, percepção e mana, proporcionando características diferentes durante a aventura.
+
+A jogabilidade é baseada na exploração de uma masmorra dividida em salas. Durante o percurso, o jogador encontrará inimigos com diferentes atributos e enfrentará combates por turnos até chegar à sala final, onde estará o chefe (*Boss*).
+
+O sistema também conta com uma loja, um baú que pode ser aberto utilizando chaves, equipamentos específicos para cada classe e um sistema de salvamento em arquivos binários, permitindo registrar e recuperar o progresso do jogador em pontos específicos da aventura.
+
+Além disso, o projeto possui um sistema de inventário com poções de vida e mana, permitindo que o jogador recupere esses recursos durante sua jornada.
 
 ---
 
 ## 2. Fluxo de Utilização Esperado para o Sistema
 
-  1. **Menu inicial**
+### 2.1 Menu principal
 
-      *Ao iniciar o programa (Overtale) o usuário irá se deparar com um simples menu onde poderá escolher entre:*
-     
-      - `1.` **Iniciar Jogo**
-      - `2.` **Sair** *(Encerra a execução do programa).*
-      
-  3. **Escolha de classes**
+Ao iniciar o programa, o usuário encontrará um menu principal com as seguintes opções:
 
-      *Caso o usuário escolha iniciar o jogo o sistema apresentará um menu de classes, contendo:*
-     
-      - `1.` **Cavaleiro**
-      - `2.` **Mago**    
-      - `3.` **Arqueira**
-        
-     *(A escolha de classes determinará os status do jogador, como a Vida, Mana, Ataque e Defesa).*
+- `1.` **Novo jogo** — inicia uma nova aventura.
+- `2.` **Carregar jogo** — recupera um progresso salvo anteriormente.
+- `3.` **Sair** — encerra a execução do programa.
 
-  4. **Jogabilidade**
-     
-     *Depois da escolha de classes o jogo será introduzido ao usuário*
-      ```Markdonw
-      IDEIA PRINCIPAL:
-      o jogo que iremos desenvolver em C, será um RPG de turnos, dividido em salas,
-      onde o jogador (usuário) enfrentará inimigos, cada um com status diferentes, por exemplo:
-      (Vida, Defesa e Ataque) esses status serão atribuídos de acordo com o tipo de inimigo (Zumbi, Esqueleto, etc...)
-      e de acordo com o nível atribuído a eles. Para cada inimigo derrotado o usuário tem uma chance de dropar algum item,
-      sendo eles: (Poções, Buff de ataque, etc...), itens esses que poderão ajudar na jornada ao longo do jogo, até o chefão final.
-      ```
-      ```Markdonw
-      COMO IRÁ FUNCIONAR:
-      Ao entrar no jogo o usuário irá se deparar com a sala inicial, representada com um mapa ASCII, e com o seu primeiro inimigo,
-      Nessa sala, o jogador terá 3 opções, sendo elas:
-             1- Atacar
-             2- Usar item (essa opção irá abrir um menu, contendo todos os itens e seus respectivos números e uma opção de voltar.)
-             3- Recuar (essa opção faz o jogador recuperar bastante vida e esquivar de um golpe inimigo,
-                porém é uma opção com baixa taxa de êxito e só deve ser utilizada em ultimos casos).  
-           
-      Como o jogo será um RPG de turnos, após a escolha do jogador, o inimigo irá atacar o mesmo, porém, caso o jogador derrote o oponente,
-      o usuário avançará de sala. Esse processo vai se repetir ao longo de todo o jogo até a fase do boss (fase final), ao menos que a vida do
-      jogador chegue em zero, que caso aconteça uma tela de GAME OVER será apresentada, porém caso o usuário chegue até o final e consiga derrotar
-      o boss uma tela vitória irá aparecer, parabenizando o jogador e assim encerrando o jogo
-      ```
+### 2.2 Escolha de classe
+
+Ao iniciar um novo jogo, o sistema apresentará um menu para a escolha da classe do personagem:
+
+- `1.` **Cavaleiro**
+- `2.` **Mago**
+- `3.` **Arqueira**
+
+A classe escolhida determinará os atributos iniciais do jogador, como vida, ataque, defesa, percepção e mana.
+
+### 2.3 Jogabilidade
+
+Após a escolha da classe, o jogador será apresentado à introdução da masmorra e poderá iniciar sua exploração.
+
+O jogo é dividido em seis salas, cada uma com características e eventos específicos:
+
+1. **Introdução:** apresenta a entrada da masmorra.
+2. **Primeiro Combate:** sala onde o jogador enfrenta um Esqueleto.
+3. **Sala da Armadilha:** apresenta um ambiente com possíveis perigos e um confronto contra um Goblin.
+4. **Loja e Baú:** permite comprar chaves utilizando ouro e abrir um baú para obter um equipamento específico da classe escolhida.
+5. **Combate Duplo:** sala que contém dois confrontos contra inimigos.
+6. **Chefe da Masmorra:** sala final, onde acontece o confronto contra o Boss.
+
+### 2.4 Sistema de combate
+
+Os combates acontecem por turnos. Durante o confronto, o jogador poderá escolher uma ação disponível no sistema.
+
+O ataque utiliza um cálculo de dano com variação aleatória, podendo ocorrer também um acerto crítico, que dobra o dano causado.
+
+O inimigo realiza seu ataque após a ação ofensiva do jogador, desde que ainda esteja vivo.
+
+Caso os pontos de vida do jogador cheguem a zero, será apresentada uma tela de **GAME OVER**, oferecendo a possibilidade de carregar o último salvamento ou sair do jogo.
+
+### 2.5 Inventário e poções
+
+O sistema de inventário permite que o jogador acompanhe e utilize os itens disponíveis durante a aventura.
+
+Entre os itens estão:
+
+- **Poção de vida:** recupera pontos de vida do personagem.
+- **Poção de mana:** recupera pontos de mana do personagem.
+
+A utilização das poções respeita a quantidade disponível no inventário e os limites máximos de vida e mana da classe escolhida.
+
+### 2.6 Sistema de salvamento
+
+O jogo utiliza arquivos binários para armazenar o estado atual da partida.
+
+O salvamento registra informações do jogador, das salas e da sala atual. O sistema cria checkpoints antes da execução dos eventos de cada sala, permitindo que o jogador recupere seu progresso caso seja derrotado.
 
 ---
 
 ## 3. Fluxograma da Lógica do Sistema
-<img width="890" height="935" alt="Fluxograma (Overtale RPG) " src="https://github.com/user-attachments/assets/a13ad353-8c79-40c8-a6bd-99de773fe683" />
 
+**[Fluxograma reservado para atualização pelo integrante responsável.]**
 
+<img width="890" height="935" alt="Fluxograma (Overtale RPG)" src="https://github.com/user-attachments/assets/a13ad353-8c79-40c8-a6bd-99de773fe683" />
 
 ---
 
 ## 4. Estrutura de Dados
 
-O sistema utilizará estruturas de dados heterogêneas (`struct`) para organizar as informações dos principais elementos do jogo. As estruturas serão utilizadas para representar o personagem do jogador, os inimigos, os itens e as salas presentes na dungeon.
+O sistema utiliza estruturas de dados heterogêneas (`struct`) para organizar as informações dos principais elementos do jogo, como o personagem do jogador, os inimigos, as salas e os dados de salvamento.
 
 ### 4.1 Estrutura do Jogador
 
-A estrutura `Jogador` será responsável por armazenar as informações referentes ao personagem controlado pelo usuário.
+A estrutura `Player` é responsável por armazenar as informações referentes ao personagem controlado pelo usuário.
 
 ```c
 typedef struct {
-	char classe[20];
-	int vida_max;
-	int vida_atual;
-	int ATK;
-	int DEF;
-	int PER;
-	int mana_max;
-	int mana_atual;
-	int ouro;	
-	int quant_chaves;
-	int ataca_longa_dist;
+    char classe[20];
+    int vida_max;
+    int vida_atual;
+    int ATK;
+    int DEF;
+    int PER;
+    int mana_max;
+    int mana_atual;
+    int ouro;
+    int quant_chaves;
+    int ataca_longa_dist;
+    int pocoes_vida;
+    int pocoes_mana;
 } Player;
 ```
 
-Os principais dados armazenados serão:
+Os principais dados armazenados são:
 
-
-* `classe`: classe escolhida pelo jogador, podendo ser Cavaleiro, Mago ou Arqueira;
-* `vida_max e vida_atual`: quantidade de pontos de vida do personagem máximos e atual;
-* `ATK`: poder de ataque do personagem;
-* `DEF`: capacidade de defesa contra ataques dos inimigos;
-* `PER`: Percepção do personagem para detectar armadilhas, inimigos escondidos, etc;
-* `mana_max e mana_atual`: quantidade de mana máxima e atual para utilizar habilidades;
-* `ouro`: quantidade de ouro obtida durante o jogo;
-* `quant_chaves`: quantas chaves o jogador está carregando;
-* `ataca_longa_dist`: Se o jogador tem a capacidade de atacar a longa distância ou não;
+- `classe`: classe escolhida pelo jogador, podendo ser Cavaleiro, Mago ou Arqueira;
+- `vida_max` e `vida_atual`: quantidade máxima e atual de pontos de vida;
+- `ATK`: poder de ataque do personagem;
+- `DEF`: capacidade de defesa contra ataques dos inimigos;
+- `PER`: atributo de percepção do personagem;
+- `mana_max` e `mana_atual`: quantidade máxima e atual de mana;
+- `ouro`: quantidade de ouro obtida durante o jogo;
+- `quant_chaves`: quantidade de chaves carregadas pelo jogador;
+- `ataca_longa_dist`: indica se a classe possui capacidade de realizar ataques à longa distância;
+- `pocoes_vida`: quantidade de poções de vida disponíveis;
+- `pocoes_mana`: quantidade de poções de mana disponíveis.
 
 ### 4.2 Estrutura dos Inimigos
 
-A estrutura `Inimigo` será utilizada para armazenar as informações dos inimigos encontrados durante a exploração das salas.
+A estrutura `Inimigo` armazena as informações dos inimigos encontrados durante a exploração das salas.
 
 ```c
 typedef struct {
-    char nome[50];
-    int nivel;
-    int vida;
-    int ataque;
-    int defesa;
-    int experiencia;
+    char inmg[20];
+    int vida_max_inmg;
+    int vida_atual_inmg;
+    int ATK_inmg;
 } Inimigo;
 ```
 
-Os principais dados armazenados serão:
+Os principais dados armazenados são:
 
-* `nome`: nome ou tipo do inimigo, como Zumbi ou Esqueleto;
-* `nivel`: nível do inimigo;
-* `vida`: quantidade de pontos de vida;
-* `ataque`: poder de ataque do inimigo;
-* `defesa`: capacidade de defesa;
-* `experiencia`: quantidade de experiência recebida pelo jogador ao derrotá-lo.
+- `inmg`: nome ou identificação do inimigo, como Esqueleto, Goblin, Zumbi ou Boss;
+- `vida_max_inmg`: quantidade máxima de pontos de vida do inimigo;
+- `vida_atual_inmg`: quantidade atual de pontos de vida;
+- `ATK_inmg`: poder de ataque do inimigo.
 
-O Boss utilizará a mesma estrutura `Inimigo`, porém possuirá atributos maiores, como maior quantidade de vida, ataque e defesa.
+Cada tipo de inimigo possui atributos próprios, definidos durante sua inicialização.
 
-### 4.3 Estrutura dos Itens
+### 4.3 Estrutura das Salas
 
-A estrutura `Item` será utilizada para armazenar as informações dos itens encontrados ou obtidos durante o jogo.
+A estrutura `Sala` representa as salas presentes na masmorra e suas respectivas características.
 
 ```c
 typedef struct {
-    char nome[50];
-    char tipo[30];
-    int efeito;
-    int quantidade;
-} Item;
-```
-
-Os principais dados armazenados serão:
-
-* `nome`: nome do item;
-* `tipo`: função ou categoria do item, como recuperação de vida ou aumento de ataque;
-* `efeito`: valor do efeito causado pelo item;
-* `quantidade`: quantidade disponível daquele item.
-
-Entre os possíveis itens estarão poções e itens capazes de aumentar o ataque do jogador.
-
-### 4.4 Estrutura das Salas
-
-A estrutura `Sala` será utilizada para representar as salas presentes na dungeon e suas características.
-
-```c
-typedef struct {
+    char sala_nome[50];
     int numero;
     int possui_inimigo;
+    int quantidade_inimigos;
     int possui_recompensa;
+    int possui_armadilha;
+    int possui_bau;
+    int bau_aberto;
     int eh_boss;
+    int visitada;
 } Sala;
 ```
 
-Os principais dados armazenados serão:
+Os principais dados armazenados são:
 
-* `numero`: número ou identificação da sala;
-* `possui_inimigo`: indica se existe um inimigo na sala;
-* `possui_recompensa`: indica se a sala possui alguma recompensa;
-* `eh_boss`: indica se a sala é a sala final onde ocorrerá a batalha contra o Boss.
+- `sala_nome`: nome da sala;
+- `numero`: identificação numérica da sala;
+- `possui_inimigo`: indica se existe algum inimigo na sala;
+- `quantidade_inimigos`: quantidade de inimigos presentes;
+- `possui_recompensa`: indica se a sala possui uma recompensa;
+- `possui_armadilha`: indica se a sala possui uma armadilha;
+- `possui_bau`: indica se a sala possui um baú;
+- `bau_aberto`: indica se o baú já foi aberto;
+- `eh_boss`: identifica se a sala corresponde à batalha contra o chefe;
+- `visitada`: indica se o jogador já visitou a sala.
 
-Dessa forma, as estruturas de dados permitirão organizar as informações necessárias para o funcionamento do jogo, incluindo o personagem do jogador, os inimigos, os itens, as salas, os combates e a progressão dentro da dungeon.
+### 4.4 Estrutura de Salvamento
+
+A estrutura `Save` reúne as informações necessárias para armazenar o progresso da partida.
+
+```c
+typedef struct {
+    Player player;
+    Sala salas[MAX_SALAS];
+    int sala_atual;
+} Save;
+```
+
+Os dados armazenados são:
+
+- `player`: estrutura que contém os atributos e o inventário do jogador;
+- `salas`: vetor que armazena as informações das seis salas da masmorra;
+- `sala_atual`: identifica a sala em que o jogador se encontra.
+
+Dessa forma, as estruturas de dados permitem organizar as informações necessárias para o funcionamento do jogo, facilitando a implementação dos sistemas de combate, inventário, exploração, loja e salvamento do progresso.
