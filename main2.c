@@ -232,7 +232,8 @@ int calcular_dano(int ataque) {
     }
     
     if (variacao == 5) {
-        escrever_lento("ACERTO CRITICO! DANO MAXIMO!\n", 20);
+        escrever_lento("ACERTO CRITICO! DANO DOBRADO!\n", 20);
+		dano = dano + danoç
     }
 
     return dano;
