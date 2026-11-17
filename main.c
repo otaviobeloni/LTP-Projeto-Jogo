@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -122,15 +121,15 @@ void limpar_buffer() {
 // Ataque player
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
-	
+
 	int dano = player->ATK;
-	
+
 	inimigo -> vida_atual_inmg -=dano;
-	
+
 	if(inimigo->vida_atual_inmg < 0){
 		inimigo->vida_atual_inmg = 0;
 	}
-	
+
 	printf("\n=============================\n");
 
     escrever_lento("Voce atacou o %s!\n",20 ,inimigo->inmg);
@@ -140,23 +139,23 @@ void ataque_plyr (Player *player, Inimigo *inimigo){
 	inimigo->vida_max_inmg);
 
     printf("=============================\n");
-	
+
 }
 
 // Ataque Inimigo
 
 void ataque_inmg (Player *player, Inimigo *inimigo){
-	
+
 	int dano = inimigo->ATK_inmg - player->DEF;
-	
+
 	if (dano<0) dano = 0;
-	
+
 	player -> vida_atual -= dano;
-	
+
 	if(player->vida_atual < 0){
 		player->vida_atual = 0;
 	}
-	
+
 	printf("\n=============================\n");
 
     escrever_lento("O %s te atacou!\n",20 ,inimigo->inmg);
@@ -167,17 +166,17 @@ void ataque_inmg (Player *player, Inimigo *inimigo){
 	escrever_lento("Sua defesa: %d",20 ,player->DEF);
 
     printf("=============================\n");
-    
+
 }
 
 // Combate
 
 void combate (Player *player, Inimigo *inimigo){
-	
+
 	int opcao;
-	
+
 	while(player->vida_atual > 0 && inimigo->vida_atual_inmg > 0){
-		
+
 		printf("\n========== COMBATE ==========\n");
         printf("1 - Atacar\n");
         printf("2 - Usar pocao\n");
@@ -193,31 +192,31 @@ void combate (Player *player, Inimigo *inimigo){
 		}
 
 		limpar_buffer();
-		
+
 		switch(opcao){
-			
+
 			case 1:
 				ataque_plyr(player, inimigo);
-				
+
 				if(inimigo->vida_atual_inmg > 0){
 					ataque_inmg(player, inimigo);
 				}
 				break;
-				
+
 			case 2:
 				// Função poção
 				break;
-				
+
 			default:
 				printf("Opcao Invalida!");
 				break;
 		}	
 	}
-	
+
 	if(player->vida_atual <= 0){
 		printf("\nVoce foi Derrotado!\n");
 	}
-	
+
 	if(inimigo->vida_atual_inmg <= 0){
 		printf("\nVoce derrotou o inimigo\n");
 		printf("Voce ganhou 3 de ouro!");
@@ -623,9 +622,9 @@ void mostrar_sala(Save *save) {
             break;
 
         case 1:{
-		
+
         	Inimigo inimigo;
-        	
+
             printf("\n========================================\n");
             printf("              PRIMEIRA SALA\n");
             printf("========================================\n\n");
@@ -634,18 +633,18 @@ void mostrar_sala(Save *save) {
             escrever_lento("O chao esta coberto de poeira e restos de antigas batalhas.\n", 35);
             escrever_lento("Algo parece estar se movimentando nas sombras...\n\n", 35);
             escrever_lento("Prepare-se. Voce nao esta sozinho aqui.\n", 35);
-            
+
             escrever_lento("\nUm goblin surge das sombras!\n", 35);
-            
+
             tipoinimigo(&inimigo, "Goblin");
     		combate(&save->player, &inimigo);
-    		
+
             break;
 		}	
-		
+
         case 2:{
         	Inimigo inimigo;
-        	
+
             printf("\n========================================\n");
             printf("          SEGUNDA SALA\n");
             printf("========================================\n\n");
@@ -654,17 +653,19 @@ void mostrar_sala(Save *save) {
             escrever_lento("Esta sala parece tranquila, mas ha algo estranho no ambiente.\n", 35);
             escrever_lento("O chao apresenta marcas e algumas partes parecem instaveis.\n\n", 35);
             escrever_lento("Tenha cuidado ao avancar...\n", 35);
-            
+
             escrever_lento("\nUm esqueleto aparece diante de voce!\n", 35);
 
     		tipoinimigo(&inimigo, "Esqueleto");
     		combate(&save->player, &inimigo);
-    		
+
             break;
 		}
-			
+
         case 3:
-        	
+
+            system("cls");
+
             printf("\n========================================\n");
             printf("                LOJA\n");
             printf("========================================\n\n");
@@ -675,12 +676,12 @@ void mostrar_sala(Save *save) {
             escrever_lento("Talvez exista algo valioso guardado la dentro...\n", 35);
 
             loja_bau(save);
-            
+
             break;
 
         case 4:{
         	Inimigo inimigo;
-        	
+
             printf("\n========================================\n");
             printf("             TERCEIRA SALA\n");
             printf("========================================\n\n");
@@ -701,13 +702,13 @@ void mostrar_sala(Save *save) {
     			tipoinimigo(&inimigo, "Goblin");
     			combate(&save->player, &inimigo);
 			}
-                    
+
             break;
 		}
-		
+
         case 5:{
         	Inimigo inimigo;
-        	
+
             printf("\n========================================\n");
             printf("               ??? SALA ???\n");
             printf("========================================\n\n");
@@ -717,10 +718,39 @@ void mostrar_sala(Save *save) {
             escrever_lento("No centro da sala, uma criatura gigantesca aguarda sua chegada.\n\n", 35);
             escrever_lento("O CHEFE DA MASMORRA despertou!\n", 50);
             escrever_lento("Prepare-se para a batalha final...\n", 50);
-            
+
             tipoinimigo(&inimigo, "Boss");
     		combate(&save->player, &inimigo);
-    		
+
+            if (save->player.vida_atual > 0 &&
+                inimigo.vida_atual_inmg <= 0) {
+
+                printf("\n");
+                printf("========================================\n");
+
+                escrever_lento(
+                    "\nO silencio finalmente retorna a masmorra...\n", 45);
+
+                escrever_lento(
+                    "A criatura que aterrorizava aquele lugar foi derrotada.\n", 45);
+
+                escrever_lento(
+                    "Com suas ultimas forcas, voce observa os portoes se abrindo.\n", 45);
+
+                escrever_lento(
+                    "\nA luz do mundo exterior finalmente alcanca seus olhos.\n", 45);
+
+                escrever_lento(
+                    "\nVoce entrou naquela masmorra como um aventureiro...\n", 45);
+
+                escrever_lento(
+                    "E saiu como uma verdadeira lenda.\n", 70);
+
+                printf("\n========================================\n");
+                printf("          FIM DA AVENTURA\n");
+                printf("========================================\n");
+            }
+
             break;
     	}
 }
@@ -741,8 +771,8 @@ void executar_jogo(Save *save) {
         printf("\n----------------------------------------\n");
 
         if (save->sala_atual == MAX_SALAS - 1) {
-            printf("\nVoce chegou ao final desta parte da masmorra!\n");
-            printf("O proximo desafio espera por voce...\n");
+
+            printf("\nSua jornada pela masmorra chegou ao fim.\n");
 
             printf("\nPressione ENTER para encerrar...");
             getchar();
