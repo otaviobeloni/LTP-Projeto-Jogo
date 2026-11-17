@@ -147,7 +147,16 @@ void combate (Player *player, Inimigo *inimigo){
         printf("2 - Usar pocao\n");
         printf("=============================\n");
 		printf("> ");
-		scanf("%d", &opcao);
+		if(scanf("%d", &opcao) != 1){
+
+    		limpar_buffer();
+
+    		printf("Digite uma opcao valida!\n");
+
+    		continue;
+		}
+
+		limpar_buffer();
 		
 		switch(opcao){
 			
@@ -176,14 +185,6 @@ void combate (Player *player, Inimigo *inimigo){
 	if(inimigo->vida_atual_inmg <= 0){
 		printf("\nVocê derrotou o inimigo\n");
 	}
-}
-
-// Limpar resto de entradas
-
-void limpar_buffer() {
-    int c;
-
-    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 
