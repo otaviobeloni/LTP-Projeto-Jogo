@@ -18,6 +18,7 @@ typedef struct {
     int mana_atual;
     int ouro;
     int quant_chaves;
+    int ataca_longa_dist;
     int dacio_sword;
 } Player;
 
@@ -219,14 +220,32 @@ int game_over(Save *save) {
     }
 }
 
+// dano aleatorio
+int calcular_dano(int ataque) {
+    int variacao = (rand() % 11) - 5;
+
+    int dano = ataque + variacao;
+
+    if (dano < 1) {
+    	escrever_lento("Golpe pessimo! Dano minimo...", 20);
+        dano = 1;
+    }
+    
+    if (variacao == 5) {
+        escrever_lento("ACERTO CRITICO! DANO MAXIMO!\n", 20);
+    }
+
+    return dano;
+}
+
 
 // Ataque player
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
 	
-	int dano = player->ATK;
+	int dano = calcular_dano(player->ATK);
 	
-	inimigo -> vida_atual_inmg -=dano;
+	inimigo->vida_atual_inmg -= dano;
 	
 	if(inimigo->vida_atual_inmg < 0){
 		inimigo->vida_atual_inmg = 0;
@@ -248,7 +267,7 @@ void ataque_plyr (Player *player, Inimigo *inimigo){
 
 void ataque_inmg (Player *player, Inimigo *inimigo){
 	
-	int dano = inimigo->ATK_inmg - player->DEF;
+	int dano = calcular_dano(inimigo->ATK_inmg) - player->DEF;
 	
 	if (dano<0) dano = 0;
 	
@@ -265,7 +284,7 @@ void ataque_inmg (Player *player, Inimigo *inimigo){
     escrever_lento("Sua vida: %d/%d\n",20 
 	,player->vida_atual,
 	player->vida_max);
-	escrever_lento("Sua defesa: %d",20 ,player->DEF);
+	escrever_lento("Sua defesa: %d\n",20 ,player->DEF);
 
     printf("=============================\n");
     
