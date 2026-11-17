@@ -234,8 +234,20 @@ int carregarJogo(Save *save) {
     return 1;
 }
 
+// Escrever lento
 
-void escrever_lento(const char *texto, int atraso) {
+void escrever_lento(const char *formato, int atraso, ...) {
+
+    char texto[500];
+
+    va_list args;
+
+    va_start(args, atraso);
+
+    vsnprintf(texto, sizeof(texto), formato, args);
+
+    va_end(args);
+
     while (*texto) {
         printf("%c", *texto);
         fflush(stdout);
