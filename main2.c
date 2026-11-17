@@ -18,7 +18,6 @@ typedef struct {
     int mana_atual;
     int ouro;
     int quant_chaves;
-    int ataca_longa_dist;
     int dacio_sword;
 } Player;
 
