@@ -1,9 +1,10 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
 
-#define MAX_SALAS 4
+#define MAX_SALAS 6
 #define PRECO_CHAVE 5
 
 typedef struct {
@@ -359,7 +360,7 @@ void selecionar_classe(Player *player) {
 }
 
 
-// Atributor do jogador
+// Atributo do jogador
 
 void mostrar_status(Save *save) {
     escrever_lento("\n=============================\n", 10);
@@ -414,6 +415,15 @@ void configurar_salas(Save *save) {
 
     inicializar_sala(&save->salas[3], 4, "Loja e Bau");
     save->salas[3].possui_bau = 1;
+
+    inicializar_sala(&save->salas[4], 5, "Combate Duplo");
+    save->salas[4].possui_inimigo = 1;
+    save->salas[4].quantidade_inimigos = 2;
+
+    inicializar_sala(&save->salas[5], 6, "Chefe da Masmorra");
+    save->salas[5].possui_inimigo = 1;
+    save->salas[5].quantidade_inimigos = 1;
+    save->salas[5].eh_boss = 1;
 }
 
 
@@ -504,14 +514,13 @@ void loja_bau(Save *save) {
                 else if (strcmp(save->player.classe, "Arqueira") == 0) {
                     printf("\nVoce encontrou um ARCO DE CACADA!\n\n");
 
-                    
-					printf(
-					    "             ) | \n"
-					    "            )  | \n"
-					    "           )   | \n"
-					    "            )  | \n"
-					    "             ) | \n\n"
-					);
+                    printf(
+                        "             ) | \n"
+                        "            )  | \n"
+                        "           )   | \n"
+                        "            )  | \n"
+                        "             ) | \n\n"
+                    );
 
                     printf("ATK +5\n");
                     save->player.ATK += 5;
@@ -575,6 +584,29 @@ void mostrar_sala(Save *save) {
             escrever_lento("Talvez exista algo valioso guardado la dentro...\n", 35);
 
             loja_bau(save);
+            break;
+
+        case 4:
+            printf("\n========================================\n");
+            printf("             TERCEIRA SALA\n");
+            printf("========================================\n\n");
+
+            escrever_lento("Voce deixa a loja para tras e atravessa uma enorme porta de pedra.\n", 35);
+            escrever_lento("Ao entrar, percebe que a sala e muito maior que as anteriores.\n", 35);
+            escrever_lento("De repente, dois inimigos surgem diante de voce!\n\n", 35);
+            escrever_lento("Prepare-se...\n", 35);
+            break;
+
+        case 5:
+            printf("\n========================================\n");
+            printf("               ??? SALA ???\n");
+            printf("========================================\n\n");
+
+            escrever_lento("Apos derrotar os inimigos, voce encontra uma enorme porta.\n", 35);
+            escrever_lento("Ao atravessa-la, chega a uma sala sombria e silenciosa.\n", 35);
+            escrever_lento("No centro da sala, uma criatura gigantesca aguarda sua chegada.\n\n", 35);
+            escrever_lento("O CHEFE DA MASMORRA despertou!\n", 50);
+            escrever_lento("Prepare-se para a batalha final...\n", 50);
             break;
     }
 
