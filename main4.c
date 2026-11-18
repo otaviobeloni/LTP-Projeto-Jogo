@@ -54,13 +54,6 @@ void tipoinimigo(Inimigo *inimigo, const char *nome_inmg) {
         inimigo->ATK_inmg = 4;
     }
 
-    else if (strcmp(nome_inmg, "Zumbi") == 0){
-        strcpy(inimigo->inmg, "Zumbi");
-        inimigo->vida_max_inmg = 30;
-        inimigo->vida_atual_inmg = 30;
-        inimigo->ATK_inmg = 5;
-    }
-
     else if (strcmp(nome_inmg, "Boss") == 0){
         strcpy(inimigo->inmg, "Boss");
         inimigo->vida_max_inmg = 45;
