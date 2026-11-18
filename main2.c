@@ -912,6 +912,11 @@ void mostrar_sala(Save *save) {
             escrever_lento("Esta sala parece tranquila, mas ha algo estranho no ambiente.\n", 35);
             escrever_lento("O chao apresenta marcas e algumas partes parecem instaveis.\n\n", 35);
             escrever_lento("Tenha cuidado ao avancar...\n", 35);
+
+            // NOVO: anuncio do Goblin depois da armadilha
+            escrever_lento("\nDe repente, um Goblin surge das sombras!\n", 50);
+            escrever_lento("Ele percebe sua presenca e se prepara para atacar!\n", 50);
+
             break;
 
         case 3:
@@ -1066,8 +1071,28 @@ void executar_jogo(Save *save) {
         printf("\n----------------------------------------\n");
 
         if (save->sala_atual == MAX_SALAS - 1) {
-            printf("\nVoce chegou ao final desta parte da masmorra!\n");
-            printf("O proximo desafio espera por voce...\n");
+
+            // NOVO: desfecho depois da derrota do Boss
+            system("cls");
+
+            printf("\n========================================\n");
+            printf("             FIM DA MASMORRA\n");
+            printf("========================================\n\n");
+
+            escrever_lento("O ultimo golpe atinge a criatura em cheio...\n", 60);
+            escrever_lento("O Boss solta um rugido ensurdecedor antes de cair ao chao.\n", 60);
+            escrever_lento("O silencio finalmente toma conta da masmorra.\n\n", 60);
+
+            escrever_lento("Apos tantos perigos, batalhas e desafios, voce conseguiu.\n", 60);
+            escrever_lento("A criatura que aterrorizava aquele lugar foi derrotada.\n", 60);
+            escrever_lento("As portas da masmorra agora estao livres.\n\n", 60);
+
+            escrever_lento("Voce sobreviveu a masmorra, aventureiro.\n", 80);
+            escrever_lento("Mas sera que esse era realmente o fim?\n", 100);
+
+            printf("\n========================================\n");
+            printf("          FIM DESTA AVENTURA\n");
+            printf("========================================\n");
 
             printf("\nPressione ENTER para encerrar...");
             getchar();
