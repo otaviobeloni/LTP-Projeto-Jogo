@@ -36,8 +36,8 @@ A classe escolhida determinará os atributos iniciais do jogador.
 
 | Atributo | Cavaleiro | Mago | Arqueira |
 |---|---:|---:|---:|
-| Vida | 18 | 12 | 15 |
-| Ataque | 5 | 10 | 3 |
+| Vida | 30 | 20 | 25 |
+| Ataque | 5 | 20 | 3 |
 | Defesa | 3 | 0 | 1 |
 | Percepção | 0 | 1 | 3 |
 | Mana | 10 | 10 | 5 |
