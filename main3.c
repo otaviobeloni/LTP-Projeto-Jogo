@@ -250,7 +250,7 @@ int calcular_dano(int ataque) {
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
 	
-	int dano = player->ATK;
+	int dano = calcular_dano(player->ATK);
 	
 	inimigo -> vida_atual_inmg -=dano;
 	
