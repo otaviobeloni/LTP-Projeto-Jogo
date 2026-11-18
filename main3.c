@@ -278,12 +278,23 @@ void ataque_especial(Player *player, Inimigo *inimigo){
 	
 	//Cavaleiro
     if(strcmp(player->classe, "Cavaleiro") == 0){
+    	
+    	if(player->mana_atual >= 5) {
+		
+        player->DEF += 1;
+        
+        dano = 10;
+        
+        inimigo->vida_atual_inmg -= dano;
+        player->mana_atual -= 5; // Consome 5 de mana
 
-        player->DEF += inimigo->ATK_inmg;
-
-        escrever_lento("\nVoce usou BLOQUEIO COM ESCUDO!\n", 20);
-        escrever_lento("O proximo ataque nao te causara dano!\n", 20);
-
+        escrever_lento("\nVoce usou GOLPE DIGNO!\n", 20);
+        
+        } else {
+        	escrever_lento("\nMana insuficiente!\n", 20);
+        	escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
+        	return;
+    	}
     }
 	// Mago
 	else if(strcmp(player->classe, "Mago") == 0) {
@@ -314,7 +325,7 @@ void ataque_especial(Player *player, Inimigo *inimigo){
         	return;
     	}
 	}
-	// Arqueiro
+	// Arqueira
 	else if(strcmp(player->classe, "Arqueira") == 0) {
 
     	if(player->mana_atual >= 5) {
@@ -729,7 +740,7 @@ void selecionar_classe(Player *player) {
             player->ATK = 5;
             player->DEF = 3;
             player->PER = 0;
-            player->mana_max = 0;
+            player->mana_max = 10;
             player->mana_atual = player->mana_max;
             player->ouro = 0;
             player->quant_chaves = 0;
@@ -737,7 +748,7 @@ void selecionar_classe(Player *player) {
             player->dacio_sword = 0;
             player->pocoes_vida = 1;
             player->pocoes_mana = 0;
-            strcpy(player->ataque_esp, "Bloqueio com Escudo");
+            strcpy(player->ataque_esp, "Golpe Digno");
 
             escolhendo_classe = 0;
         }
