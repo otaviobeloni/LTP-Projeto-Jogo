@@ -43,30 +43,30 @@ void tipoinimigo(Inimigo *inimigo, const char *nome_inmg) {
 
     if (strcmp(nome_inmg, "Esqueleto") == 0){
         strcpy(inimigo->inmg, "Esqueleto");
-        inimigo->vida_max_inmg = 20;
-        inimigo->vida_atual_inmg = 20;
+        inimigo->vida_max_inmg = 18;
+        inimigo->vida_atual_inmg = 18;
         inimigo->ATK_inmg = 5;
     }
 
     else if (strcmp(nome_inmg, "Goblin") == 0){
         strcpy(inimigo->inmg, "Goblin");
-        inimigo->vida_max_inmg = 30;
-        inimigo->vida_atual_inmg = 30;
-        inimigo->ATK_inmg = 3;
+        inimigo->vida_max_inmg = 22;
+        inimigo->vida_atual_inmg = 22;
+        inimigo->ATK_inmg = 4;
     }
 
     else if (strcmp(nome_inmg, "Zumbi") == 0){
         strcpy(inimigo->inmg, "Zumbi");
-        inimigo->vida_max_inmg = 50;
-        inimigo->vida_atual_inmg = 50;
-        inimigo->ATK_inmg = 7;
+        inimigo->vida_max_inmg = 30;
+        inimigo->vida_atual_inmg = 30;
+        inimigo->ATK_inmg = 5;
     }
 
     else if (strcmp(nome_inmg, "Boss") == 0){
         strcpy(inimigo->inmg, "Boss");
-        inimigo->vida_max_inmg = 100;
-        inimigo->vida_atual_inmg = 100;
-        inimigo->ATK_inmg = 12;
+        inimigo->vida_max_inmg = 45;
+        inimigo->vida_atual_inmg = 45;
+        inimigo->ATK_inmg = 5;
     }
 }
 
@@ -122,6 +122,13 @@ void limpar_buffer() {
     int c;
 
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+// Pausa a historia ate o jogador pressionar ENTER.
+void aguardar_enter(const char *mensagem) {
+    printf("\n%s", mensagem);
+    fflush(stdout);
+    getchar();
 }
 
 // Sistema de save
@@ -226,6 +233,25 @@ int game_over(Save *save) {
     }
 }
 
+// dano aleatorio
+int calcular_dano(int ataque) {
+    int variacao = (rand() % 11) - 5;
+
+    int dano = ataque + variacao;
+
+    if (dano < 1) {
+        escrever_lento("Golpe pessimo! Dano minimo...", 20);
+        dano = 1;
+    }
+
+    if (variacao == 5) {
+        escrever_lento("ACERTO CRITICO! DANO DOBRADO!\n", 20);
+        dano = dano + dano;
+    }
+
+    return dano;
+}
+
 
 // Ataque player
 
@@ -233,7 +259,7 @@ void ataque_plyr (Player *player, Inimigo *inimigo){
 	
 	int dano = player->ATK;
 	
-	inimigo -> vida_atual_inmg -=dano;
+	inimigo -> vida_atual_inmg -= dano;
 	
 	if(inimigo->vida_atual_inmg < 0){
 		inimigo->vida_atual_inmg = 0;
@@ -252,163 +278,153 @@ void ataque_plyr (Player *player, Inimigo *inimigo){
 }
 
 // Ataque especial
+// Retorna 1 quando a habilidade foi executada e 0 quando nao foi.
+int ataque_especial(Player *player, Inimigo *inimigo,
+                    int *bonus_def_ativo, int *manto_ativo) {
+    int dano = 0;
 
-void ataque_especial(Player *player, Inimigo *inimigo){
-	
-	int dano = 0;
-	
-	//Cavaleiro
-    if(strcmp(player->classe, "Cavaleiro") == 0){
-    	
-    	if(player->mana_atual >= 5) {
-		
-        player->DEF += 1;
-        
+    // Cavaleiro: causa dano e recebe +1 DEF ate a resposta do inimigo.
+    if (strcmp(player->classe, "Cavaleiro") == 0) {
+        if (player->mana_atual < 5) {
+            escrever_lento("\nMana insuficiente!\n", 20);
+            escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
+            return 0;
+        }
+
         dano = 10;
-        
         inimigo->vida_atual_inmg -= dano;
-        player->mana_atual -= 5; // Consome 5 de mana
+        if (inimigo->vida_atual_inmg < 0) {
+            inimigo->vida_atual_inmg = 0;
+        }
+        player->mana_atual -= 5;
+        player->DEF += 1;
+        *bonus_def_ativo = 1;
 
         escrever_lento("\nVoce usou GOLPE DIGNO!\n", 20);
-        
-        } else {
-        	escrever_lento("\nMana insuficiente!\n", 20);
-        	escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
-        	return;
-    	}
+        printf("\n=============================\n");
+        escrever_lento("Voce atacou o %s!\n", 20, inimigo->inmg);
+        escrever_lento("O ataque causou %d pontos de dano\n", 20, dano);
+        escrever_lento("Sua defesa aumentou em 1 ponto ate o proximo ataque inimigo.\n", 20);
+        escrever_lento("Vida do inimigo: %d/%d\n", 20,
+                       inimigo->vida_atual_inmg, inimigo->vida_max_inmg);
+        printf("=============================\n");
+        return 1;
     }
-	// Mago
-	else if(strcmp(player->classe, "Mago") == 0) {
+    // Mago: causa dano direto e consome mana.
+    else if (strcmp(player->classe, "Mago") == 0) {
+        if (player->mana_atual < 5) {
+            escrever_lento("\nMana insuficiente!\n", 20);
+            escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
+            return 0;
+        }
 
-    	if(player->mana_atual >= 5) {
+        dano = 20;
+        inimigo->vida_atual_inmg -= dano;
+        if (inimigo->vida_atual_inmg < 0) {
+            inimigo->vida_atual_inmg = 0;
+        }
+        player->mana_atual -= 5;
 
-        	dano = 20;
+        escrever_lento("\nVoce usou RAIO MISTICO!\n", 20);
+        printf("\n=============================\n");
+        escrever_lento("Voce atacou o %s!\n", 20, inimigo->inmg);
+        escrever_lento("O ataque causou %d pontos de dano\n", 20, dano);
+        escrever_lento("Vida do inimigo: %d/%d\n", 20,
+                       inimigo->vida_atual_inmg, inimigo->vida_max_inmg);
+        printf("=============================\n");
+        return 1;
+    }
+    // Arqueira: prepara um aumento temporario para o proximo ataque.
+    else if (strcmp(player->classe, "Arqueira") == 0) {
+        if (player->mana_atual < 5) {
+            escrever_lento("\nMana insuficiente!\n", 20);
+            escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
+            return 0;
+        }
 
-        	inimigo->vida_atual_inmg -= dano;
-        	player->mana_atual -= 5; // Consome 5 de mana
+        if (*manto_ativo == 1) {
+            escrever_lento("\nO MANTO DOS CACADORES ja esta ativo!\n", 20);
+            return 0;
+        }
 
-        	escrever_lento("\nVoce usou RAIO MISTICO!\n", 20);
+        player->ATK += 3;
+        player->DEF += 3;
+        player->mana_atual -= 5;
+        *manto_ativo = 1;
 
-        	printf("\n=============================\n");
+        escrever_lento("\nVoce usou MANTO DOS CACADORES!\n", 20);
+        escrever_lento("Seu ataque e sua defesa aumentaram em 3 pontos.\n", 20);
+        escrever_lento("Aproveite o bonus no seu proximo ataque!\n", 20);
+        return 1;
+    }
 
-        	escrever_lento("Voce atacou o %s!\n", 20, inimigo->inmg);
-        	escrever_lento("O ataque causou %d pontos de dano\n", 20, dano);
-
-        	escrever_lento("Vida do inimigo: %d/%d\n", 20,
-            inimigo->vida_atual_inmg,
-            inimigo->vida_max_inmg);
-
-        	printf("=============================\n");
-
-    	} else {
-        	escrever_lento("\nMana insuficiente!\n", 20);
-        	escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
-        	return;
-    	}
-	}
-	// Arqueira
-	else if(strcmp(player->classe, "Arqueira") == 0) {
-
-    	if(player->mana_atual >= 5) {
-
-        	player->ATK += 3;
-        	player->DEF += 3;
-
-        	player->mana_atual -= 5;
-
-        	escrever_lento("\nVoce usou MANTO DOS CACADORES!\n", 20);
-        	escrever_lento("\nSeus status de ataque e defesa aumentaram em 3 pontos cada!\n", 20);
-
-    	} else {
-        	escrever_lento("\nMana insuficiente!\n", 20);
-        	escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
-        	return;
-    	}
-	}
+    return 0;
 }
-// Menu ataque
 
-void menu_ataque(Player *player, Inimigo *inimigo){
-
+// Menu de ataque
+// Retornos: 0 = voltou/nao executou acao; 1 = ataque normal; 2 = especial.
+int menu_ataque(Player *player, Inimigo *inimigo,
+                int *bonus_def_ativo, int *manto_ativo) {
     int opcao;
-    
+
     system("cls");
+    while (1) {
+        printf("\n=============================\n");
+        escrever_lento("       MENU DE ATAQUE\n", 20);
+        printf("=============================\n");
+        escrever_lento("1 - Ataque Normal\n", 20);
+        escrever_lento("2 - %s\n", 20, player->ataque_esp);
+        escrever_lento("0 - Voltar\n", 20);
+        printf("=============================\n");
+        printf("> ");
 
-    printf("\n=============================\n");
+        if (scanf("%d", &opcao) != 1) {
+            limpar_buffer();
+            escrever_lento("\nEntrada invalida! Tente novamente.\n", 20);
+            continue;
+        }
+        limpar_buffer();
 
-    escrever_lento("       MENU DE ATAQUE\n", 20);
-
-    printf("=============================\n");
-
-    escrever_lento("1 - Ataque Normal\n", 20);
-    escrever_lento("2 - %s\n", 20, player->ataque_esp);
-    escrever_lento("0 - Voltar\n", 20);
-
-    printf("=============================\n");
-
-    escrever_lento("> ", 20);
-    scanf("%d", &opcao);
-
-    switch(opcao){
-
-        case 1:
-            ataque_plyr(player, inimigo);
-            break;
-
-        case 2:
-            ataque_especial(player, inimigo);
-            break;
-
-        case 0:
-            return;
-
-        default:
-            escrever_lento("\nOpcao invalida!\n", 20);
-            break;
+        switch (opcao) {
+            case 1:
+                ataque_plyr(player, inimigo);
+                return 1;
+            case 2:
+                if (ataque_especial(player, inimigo,
+                                    bonus_def_ativo, manto_ativo)) {
+                    return 2;
+                }
+                // Falha por falta de mana ou habilidade ja ativa nao consome turno.
+                return 0;
+            case 0:
+                return 0;
+            default:
+                escrever_lento("\nOpcao invalida! Tente novamente.\n", 20);
+                break;
+        }
     }
 }
 
 // Ataque Inimigo
+void ataque_inmg(Player *player, Inimigo *inimigo) {
+    int dano = inimigo->ATK_inmg - player->DEF;
 
-void ataque_inmg (Player *player, Inimigo *inimigo){
-	
-    int dano = inimigo->ATK_inmg;
-
-    if(player->DEF > 0){
-
-        if(dano >= player->DEF){
-
-            dano -= player->DEF;
-            player->DEF = 0;
-
-        } else {
-
-            player->DEF -= dano;
-            dano = 0;
-
-        }
+    // DEF reduz o dano recebido, sem ser consumida.
+    if (dano < 0) {
+        dano = 0;
     }
 
-    if(dano > 0){
-
-        player->vida_atual -= dano;
-
-        if(player->vida_atual < 0){
-            player->vida_atual = 0;
-        }
+    player->vida_atual -= dano;
+    if (player->vida_atual < 0) {
+        player->vida_atual = 0;
     }
-	
-	printf("\n=============================\n");
-
-    escrever_lento("O %s te atacou!\n",20 ,inimigo->inmg);
-    escrever_lento("O Ataque causou %d pontos de dano\n",20 ,dano);
-    escrever_lento("Sua vida: %d/%d\n",20 
-	,player->vida_atual,
-	player->vida_max);
-	escrever_lento("Sua defesa: %d",20 ,player->DEF);
 
     printf("\n=============================\n");
-    
+    escrever_lento("O %s te atacou!\n", 20, inimigo->inmg);
+    escrever_lento("O ataque causou %d pontos de dano\n", 20, dano);
+    escrever_lento("Sua vida: %d/%d\n", 20, player->vida_atual, player->vida_max);
+    escrever_lento("Sua defesa: %d\n", 20, player->DEF);
+    printf("=============================\n");
 }
 
 // Inventario
@@ -489,6 +505,9 @@ void usar_pocao_mana(Player *player) {
 // 2 = combate terminou normalmente
 int combate(Save *save, Inimigo *inimigo) {
     int opcao;
+    int acao;
+    int bonus_def_ativo = 0;
+    int manto_ativo = 0;
     Player *player = &save->player;
 
     while (player->vida_atual > 0 && inimigo->vida_atual_inmg > 0) {
@@ -499,8 +518,7 @@ int combate(Save *save, Inimigo *inimigo) {
         if (player->mana_max > 0) {
             printf("3 - Usar pocao de mana\n");
             printf("4 - Mostrar inventario\n");
-        }
-        else {
+        } else {
             printf("3 - Mostrar inventario\n");
         }
 
@@ -512,15 +530,40 @@ int combate(Save *save, Inimigo *inimigo) {
             printf("Digite uma opcao valida!\n");
             continue;
         }
-
         limpar_buffer();
 
         switch (opcao) {
             case 1:
-                menu_ataque(player, inimigo);
+                acao = menu_ataque(player, inimigo,
+                                   &bonus_def_ativo, &manto_ativo);
+
+                // Voltar, opcao invalida ou habilidade indisponivel nao passa o turno.
+                if (acao == 0) {
+                    break;
+                }
+
+                // O Manto dos Cacadores prepara a Arqueira e nao permite contra-ataque imediato.
+                if (acao == 2 && strcmp(player->classe, "Arqueira") == 0) {
+                    break;
+                }
 
                 if (inimigo->vida_atual_inmg > 0) {
                     ataque_inmg(player, inimigo);
+                }
+
+                // O bonus de DEF do Cavaleiro dura somente ate a resposta deste inimigo.
+                if (bonus_def_ativo == 1) {
+                    player->DEF -= 1;
+                    bonus_def_ativo = 0;
+                    escrever_lento("\nO bonus de defesa do GOLPE DIGNO terminou.\n", 20);
+                }
+
+                // O bonus da Arqueira dura ate concluir seu proximo ataque e receber a resposta do inimigo.
+                if (manto_ativo == 1) {
+                    player->ATK -= 3;
+                    player->DEF -= 3;
+                    manto_ativo = 0;
+                    escrever_lento("\nO efeito do Manto dos Cacadores terminou.\n", 20);
                 }
                 break;
 
@@ -531,8 +574,7 @@ int combate(Save *save, Inimigo *inimigo) {
             case 3:
                 if (player->mana_max > 0) {
                     usar_pocao_mana(player);
-                }
-                else {
+                } else {
                     mostrar_inventario(player);
                 }
                 break;
@@ -540,8 +582,7 @@ int combate(Save *save, Inimigo *inimigo) {
             case 4:
                 if (player->mana_max > 0) {
                     mostrar_inventario(player);
-                }
-                else {
+                } else {
                     printf("Opcao invalida!\n");
                 }
                 break;
@@ -562,7 +603,6 @@ int combate(Save *save, Inimigo *inimigo) {
 
     return 2;
 }
-
 
 // Armadilha
 
@@ -673,9 +713,6 @@ void primeira_sala(Save *save) {
 
     easter_egg(&save->player);
 
-    printf("\nPressione ENTER para continuar...");
-    getchar();
-
     printf("\n----------------------------------------\n");
 
     escrever_lento("Depois de explorar a entrada, voce percebe uma passagem adiante.\n", 35);
@@ -716,12 +753,12 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Cavaleiro");
 
-            player->vida_max = 15;
+            player->vida_max = 18;
             player->vida_atual = player->vida_max;
             player->ATK = 5;
             player->DEF = 3;
             player->PER = 0;
-            player->mana_max = 10;
+            player->mana_max = 5;
             player->mana_atual = player->mana_max;
             player->ouro = 0;
             player->quant_chaves = 0;
@@ -739,7 +776,7 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Mago");
 
-            player->vida_max = 5;
+            player->vida_max = 12;
             player->vida_atual = player->vida_max;
             player->ATK = 10;
             player->DEF = 0;
@@ -762,7 +799,7 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Arqueira");
 
-            player->vida_max = 8;
+            player->vida_max = 15;
             player->vida_atual = player->vida_max;
             player->ATK = 3;
             player->DEF = 1;
@@ -1073,6 +1110,36 @@ void mostrar_sala(Save *save) {
 }
 
 
+// Apresenta o inimigo antes de iniciar cada combate.
+void apresentar_inimigo(const char *nome_inimigo, int numero, int total) {
+    printf("\n========================================\n");
+
+    if (strcmp(nome_inimigo, "Esqueleto") == 0) {
+        escrever_lento("Das sombras, ossos comecam a se mover...\n", 35);
+        escrever_lento("Um ESQUELETO se levanta e bloqueia seu caminho!\n", 35);
+    }
+    else if (strcmp(nome_inimigo, "Goblin") == 0) {
+        escrever_lento("Voce escuta passos rapidos e um rosnado...\n", 35);
+        escrever_lento("Um GOBLIN aparece diante de voce, pronto para atacar!\n", 35);
+    }
+    else if (strcmp(nome_inimigo, "Zumbi") == 0) {
+        escrever_lento("Um cheiro forte toma conta do ambiente...\n", 35);
+        escrever_lento("Um ZUMBI se arrasta lentamente em sua direcao!\n", 35);
+    }
+    else if (strcmp(nome_inimigo, "Boss") == 0) {
+        escrever_lento("O chao comeca a tremer e uma presenca ameacadora se aproxima...\n", 40);
+        escrever_lento("O BOSS DA MASMORRA esta diante de voce!\n", 50);
+        escrever_lento("Esta e sua batalha final. Prepare-se!\n", 50);
+    }
+
+    if (total > 1) {
+        printf("\nInimigo %d de %d\n", numero, total);
+    }
+
+    printf("========================================\n");
+    aguardar_enter("Pressione ENTER para iniciar o combate...");
+}
+
 // Executa os inimigos definidos para a sala atual.
 // Os indices correspondem aos indices usados em configurar_salas().
 int executar_combate_sala(Save *save) {
@@ -1109,9 +1176,8 @@ int executar_combate_sala(Save *save) {
     for (i = 0; i < save->salas[save->sala_atual].quantidade_inimigos; i++) {
         tipoinimigo(&inimigo, nome_inimigo);
 
-        printf("\nInimigo %d de %d\n",
-               i + 1,
-               save->salas[save->sala_atual].quantidade_inimigos);
+        apresentar_inimigo(nome_inimigo, i + 1,
+                           save->salas[save->sala_atual].quantidade_inimigos);
 
         resultado = combate(save, &inimigo);
 
@@ -1155,6 +1221,9 @@ void executar_jogo(Save *save) {
         salvar_jogo(save);
 
         mostrar_sala(save);
+
+        // Da tempo para o jogador ler o prologo antes dos eventos da sala.
+        aguardar_enter("Pressione ENTER para continuar e descobrir o que ha nesta sala...");
 
         // Verifica se a sala possui armadilha.
         if (save->salas[save->sala_atual].possui_armadilha == 1) {
