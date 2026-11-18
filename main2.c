@@ -6,6 +6,9 @@
 
 #define MAX_SALAS 6
 #define PRECO_CHAVE 5
+#define PRECO_POCAO 3
+#define CURA_POCAO_VIDA 2
+#define CURA_POCAO_MANA 2
 
 typedef struct {
     char classe[20];
@@ -18,6 +21,8 @@ typedef struct {
     int mana_atual;
     int ouro;
     int quant_chaves;
+    int pocoes_vida;
+    int pocoes_mana;
     int ataca_longa_dist;
     int dacio_sword;
 } Player;
@@ -292,6 +297,75 @@ void ataque_inmg (Player *player, Inimigo *inimigo){
 
 }
 
+void mostrar_inventario(Player *player) {
+    if (player == NULL) return;
+
+    printf("\n========== INVENTARIO ==========\n");
+    printf("Pocoes de vida: %d\n", player->pocoes_vida);
+
+    if (player->mana_max > 0) {
+        printf("Pocoes de mana: %d\n", player->pocoes_mana);
+    }
+
+    printf("================================\n");
+}
+
+void usar_pocao_vida(Player *player) {
+    if (player == NULL) return;
+
+    if (player->pocoes_vida <= 0) {
+        printf("\nVoce nao possui pocoes de vida!\n");
+        return;
+    }
+
+    if (player->vida_atual >= player->vida_max) {
+        printf("\nSua vida ja esta cheia!\n");
+        return;
+    }
+
+    player->vida_atual += CURA_POCAO_VIDA;
+
+    if (player->vida_atual > player->vida_max) {
+        player->vida_atual = player->vida_max;
+    }
+
+    player->pocoes_vida--;
+
+    printf("\nVoce utilizou uma pocao de vida!\n");
+    printf("Vida atual: %d/%d\n", player->vida_atual, player->vida_max);
+}
+
+void usar_pocao_mana(Player *player) {
+    if (player == NULL) return;
+
+    if (player->pocoes_mana <= 0) {
+        printf("\nVoce nao possui pocoes de mana!\n");
+        return;
+    }
+
+    if (player->mana_max == 0) {
+        printf("\nSua classe nao utiliza mana!\n");
+        return;
+    }
+
+    if (player->mana_atual >= player->mana_max) {
+        printf("\nSua mana ja esta cheia!\n");
+        return;
+    }
+
+    player->mana_atual += CURA_POCAO_MANA;
+
+    if (player->mana_atual > player->mana_max) {
+        player->mana_atual = player->mana_max;
+    }
+
+    player->pocoes_mana--;
+
+    printf("\nVoce utilizou uma pocao de mana!\n");
+    printf("Mana atual: %d/%d\n", player->mana_atual, player->mana_max);
+}
+
+
 // Combate
 // Retornos:
 // 0 = jogador escolheu sair no Game Over
@@ -304,7 +378,16 @@ int combate(Save *save, Inimigo *inimigo) {
     while (player->vida_atual > 0 && inimigo->vida_atual_inmg > 0) {
         printf("\n========== COMBATE ==========\n");
         printf("1 - Atacar\n");
-        printf("2 - Usar pocao\n");
+        printf("2 - Usar pocao de vida\n");
+
+        if (player->mana_max > 0) {
+            printf("3 - Usar pocao de mana\n");
+            printf("4 - Mostrar inventario\n");
+        }
+        else {
+            printf("3 - Mostrar inventario\n");
+        }
+
         printf("=============================\n");
         printf("> ");
 
@@ -326,8 +409,25 @@ int combate(Save *save, Inimigo *inimigo) {
                 break;
 
             case 2:
-                // Funcao de pocao sera implementada aqui.
-                printf("Sistema de pocoes ainda nao implementado.\n");
+                usar_pocao_vida(player);
+                break;
+
+            case 3:
+                if (player->mana_max > 0) {
+                    usar_pocao_mana(player);
+                }
+                else {
+                    mostrar_inventario(player);
+                }
+                break;
+
+            case 4:
+                if (player->mana_max > 0) {
+                    mostrar_inventario(player);
+                }
+                else {
+                    printf("Opcao invalida!\n");
+                }
                 break;
 
             default:
@@ -500,7 +600,7 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Cavaleiro");
 
-            player->vida_max = 10;
+            player->vida_max = 15;
             player->vida_atual = player->vida_max;
             player->ATK = 5;
             player->DEF = 3;
@@ -511,6 +611,8 @@ void selecionar_classe(Player *player) {
             player->quant_chaves = 0;
             player->ataca_longa_dist = 0;
             player->dacio_sword = 0;
+            player->pocoes_vida = 1;
+            player->pocoes_mana = 0;
 
             escolhendo_classe = 0;
         }
@@ -531,6 +633,8 @@ void selecionar_classe(Player *player) {
             player->quant_chaves = 0;
             player->ataca_longa_dist = 1;
             player->dacio_sword = 0;
+            player->pocoes_vida = 1;
+            player->pocoes_mana = 1;
 
             escolhendo_classe = 0;
         }
@@ -551,6 +655,8 @@ void selecionar_classe(Player *player) {
             player->quant_chaves = 1;
             player->ataca_longa_dist = 1;
             player->dacio_sword = 0;
+            player->pocoes_vida = 1;
+            player->pocoes_mana = 1;
 
             escolhendo_classe = 0;
         }
@@ -576,11 +682,13 @@ void mostrar_status(Save *save) {
     printf("Mana: %d/%d\n", save->player.mana_atual, save->player.mana_max);
     printf("Ouro: %d\n", save->player.ouro);
     printf("Chaves: %d\n", save->player.quant_chaves);
+    mostrar_inventario(&save->player);
 
     printf("\nVoce atualmente esta na sala %d, chamada de %s\n",
         save->salas[save->sala_atual].numero,
         save->salas[save->sala_atual].sala_nome);
 }
+
 
 // Inicializar sala
 
@@ -631,6 +739,8 @@ void configurar_salas(Save *save) {
 
 void loja_bau(Save *save) {
     int opcao;
+    int opcao_bau;
+    int opcao_sair;
 
     while (1) {
         printf("\n========================================\n");
@@ -641,8 +751,20 @@ void loja_bau(Save *save) {
         printf("\nChaves: %d\n", save->player.quant_chaves);
 
         printf("\n1 - Comprar uma chave (%d ouros)\n", PRECO_CHAVE);
-        printf("2 - Abrir o bau\n");
-        printf("3 - Sair da loja\n");
+        printf("2 - Comprar pocao de vida (%d ouros)\n", PRECO_POCAO);
+
+        if (save->player.mana_max > 0) {
+            printf("3 - Comprar pocao de mana (%d ouros)\n", PRECO_POCAO);
+            opcao_bau = 4;
+        }
+        else {
+            opcao_bau = 3;
+        }
+
+        opcao_sair = opcao_bau + 1;
+
+        printf("%d - Abrir o bau\n", opcao_bau);
+        printf("%d - Sair da loja\n", opcao_sair);
 
         printf("\n> ");
 
@@ -658,7 +780,6 @@ void loja_bau(Save *save) {
             if (save->player.ouro >= PRECO_CHAVE) {
                 save->player.ouro -= PRECO_CHAVE;
                 save->player.quant_chaves++;
-
                 escrever_lento("\nVoce comprou uma chave!\n", 30);
             }
             else {
@@ -666,6 +787,26 @@ void loja_bau(Save *save) {
             }
         }
         else if (opcao == 2) {
+            if (save->player.ouro >= PRECO_POCAO) {
+                save->player.ouro -= PRECO_POCAO;
+                save->player.pocoes_vida++;
+                escrever_lento("\nVoce comprou uma pocao de vida!\n", 30);
+            }
+            else {
+                printf("\nVoce nao possui ouro suficiente!\n");
+            }
+        }
+        else if (save->player.mana_max > 0 && opcao == 3) {
+            if (save->player.ouro >= PRECO_POCAO) {
+                save->player.ouro -= PRECO_POCAO;
+                save->player.pocoes_mana++;
+                escrever_lento("\nVoce comprou uma pocao de mana!\n", 30);
+            }
+            else {
+                printf("\nVoce nao possui ouro suficiente!\n");
+            }
+        }
+        else if (opcao == opcao_bau) {
             if (save->salas[3].bau_aberto == 1) {
                 escrever_lento("\nO bau ja foi aberto!\n", 30);
             }
@@ -730,7 +871,7 @@ void loja_bau(Save *save) {
                 escrever_lento("\nVoce precisa de uma chave para abrir o bau!\n", 20);
             }
         }
-        else if (opcao == 3) {
+        else if (opcao == opcao_sair) {
             escrever_lento("\nVoce deixou a loja para tras.\n", 20);
             break;
         }
@@ -858,6 +999,19 @@ int executar_combate_sala(Save *save) {
         // Interrompe a sala se o jogador saiu ou carregou um checkpoint.
         if (resultado != 2) {
             return resultado;
+        }
+
+        /* Recompensa por inimigo derrotado. O Boss nao concede ouro. */
+        if (inimigo.vida_atual_inmg <= 0) {
+            if (strcmp(nome_inimigo, "Esqueleto") == 0 ||
+                strcmp(nome_inimigo, "Goblin") == 0) {
+                save->player.ouro += 4;
+                printf("\nVoce recebeu 4 moedas de ouro!\n");
+            }
+            else if (strcmp(nome_inimigo, "Zumbi") == 0) {
+                save->player.ouro += 5;
+                printf("\nVoce recebeu 5 moedas de ouro!\n");
+            }
         }
     }
 
