@@ -54,6 +54,13 @@ void tipoinimigo(Inimigo *inimigo, const char *nome_inmg) {
         inimigo->ATK_inmg = 4;
     }
 
+    else if (strcmp(nome_inmg, "Zumbi") == 0){
+        strcpy(inimigo->inmg, "Zumbi");
+        inimigo->vida_max_inmg = 30;
+        inimigo->vida_atual_inmg = 30;
+        inimigo->ATK_inmg = 5;
+    }
+
     else if (strcmp(nome_inmg, "Boss") == 0){
         strcpy(inimigo->inmg, "Boss");
         inimigo->vida_max_inmg = 45;
@@ -307,8 +314,6 @@ int ataque_especial(Player *player, Inimigo *inimigo,
         *bonus_def_ativo = 1;
 
         escrever_lento("\nVoce usou GOLPE DIGNO!\n", 20);
-        escrever_lento("O ataque especial consome 5 de mana!\nSua mana:%d/%d",20,player->mana_atual,player->mana_max);
-        
         printf("\n=============================\n");
         escrever_lento("Voce atacou o %s!\n", 20, inimigo->inmg);
         escrever_lento("O ataque causou %d pontos de dano\n", 20, dano);
@@ -334,8 +339,6 @@ int ataque_especial(Player *player, Inimigo *inimigo,
         player->mana_atual -= 5;
 
         escrever_lento("\nVoce usou RAIO MISTICO!\n", 20);
-        escrever_lento("O ataque especial consome 5 de mana!\nSua mana:%d/%d",20,player->mana_atual,player->mana_max);
-        
         printf("\n=============================\n");
         escrever_lento("Voce atacou o %s!\n", 20, inimigo->inmg);
         escrever_lento("O ataque causou %d pontos de dano\n", 20, dano);
@@ -346,13 +349,14 @@ int ataque_especial(Player *player, Inimigo *inimigo,
     }
     // Arqueira: prepara um aumento temporario para o proximo ataque.
     else if (strcmp(player->classe, "Arqueira") == 0) {
-    	
-    	if (*manto_ativo == 1) {
-            escrever_lento("\nO MANTO DOS CACADORES ja esta ativo!\n", 20);
-            return 0;
-        }else if (player->mana_atual < 5) {
+        if (player->mana_atual < 5) {
             escrever_lento("\nMana insuficiente!\n", 20);
             escrever_lento("Voce precisa de 5 de mana para usar essa habilidade.\n", 20);
+            return 0;
+        }
+
+        if (*manto_ativo == 1) {
+            escrever_lento("\nO MANTO DOS CACADORES ja esta ativo!\n", 20);
             return 0;
         }
 
@@ -362,8 +366,7 @@ int ataque_especial(Player *player, Inimigo *inimigo,
         *manto_ativo = 1;
 
         escrever_lento("\nVoce usou MANTO DOS CACADORES!\n", 20);
-        escrever_lento("O ataque especial consome 5 de mana!\nSua mana:%d/%d",20,player->mana_atual,player->mana_max);
-        escrever_lento("\nSeu ataque e sua defesa aumentaram em 3 pontos.\n", 20);
+        escrever_lento("Seu ataque e sua defesa aumentaram em 3 pontos.\n", 20);
         escrever_lento("Aproveite o bonus no seu proximo ataque!\n", 20);
         return 1;
     }
@@ -763,7 +766,7 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Cavaleiro");
 
-            player->vida_max = 18;
+            player->vida_max = 30;
             player->vida_atual = player->vida_max;
             player->ATK = 5;
             player->DEF = 3;
@@ -785,7 +788,7 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Mago");
 
-            player->vida_max = 12;
+            player->vida_max = 20;
             player->vida_atual = player->vida_max;
             player->ATK = 10;
             player->DEF = 0;
@@ -807,7 +810,7 @@ void selecionar_classe(Player *player) {
 
             strcpy(player->classe, "Arqueira");
 
-            player->vida_max = 15;
+            player->vida_max = 25;
             player->vida_atual = player->vida_max;
             player->ATK = 3;
             player->DEF = 1;
