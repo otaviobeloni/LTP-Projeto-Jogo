@@ -243,31 +243,11 @@ int game_over(Save *save) {
     }
 }
 
-// dano aleatorio
-int calcular_dano(int ataque) {
-    int variacao = (rand() % 11) - 5;
-
-    int dano = ataque + variacao;
-
-    if (dano < 1) {
-        escrever_lento("Golpe pessimo! Dano minimo...", 20);
-        dano = 1;
-    }
-
-    if (variacao == 5) {
-        escrever_lento("ACERTO CRITICO! DANO DOBRADO!\n", 20);
-        dano = dano + dano;
-    }
-
-    return dano;
-}
-
-
 // Ataque player
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
 	
-	int dano = calcular_dano(player->ATK);
+	int dano = player->ATK;
 	
 	inimigo -> vida_atual_inmg -= dano;
 	
@@ -417,7 +397,7 @@ int menu_ataque(Player *player, Inimigo *inimigo,
 
 // Ataque Inimigo
 void ataque_inmg(Player *player, Inimigo *inimigo) {
-    int dano = calcular_dano(inimigo->ATK_inmg) - (player->DEF);
+    int dano = (inimigo->ATK_inmg)- (player->DEF);
 
     // DEF reduz o dano recebido, sem ser consumida.
     if (dano < 0) {
