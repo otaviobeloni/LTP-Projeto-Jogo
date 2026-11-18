@@ -54,6 +54,13 @@ void tipoinimigo(Inimigo *inimigo, const char *nome_inmg) {
         inimigo->ATK_inmg = 4;
     }
 
+    else if (strcmp(nome_inmg, "Zumbi") == 0){
+        strcpy(inimigo->inmg, "Zumbi");
+        inimigo->vida_max_inmg = 30;
+        inimigo->vida_atual_inmg = 30;
+        inimigo->ATK_inmg = 5;
+    }
+
     else if (strcmp(nome_inmg, "Boss") == 0){
         strcpy(inimigo->inmg, "Boss");
         inimigo->vida_max_inmg = 45;
@@ -783,7 +790,7 @@ void selecionar_classe(Player *player) {
 
             player->vida_max = 20;
             player->vida_atual = player->vida_max;
-            player->ATK = 10;
+            player->ATK = 20;
             player->DEF = 0;
             player->PER = 1;
             player->mana_max = 10;
