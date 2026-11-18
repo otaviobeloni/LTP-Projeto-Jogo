@@ -7,8 +7,8 @@
 #define MAX_SALAS 6
 #define PRECO_CHAVE 5
 #define PRECO_POCAO 3
-#define CURA_POCAO_VIDA 2
-#define CURA_POCAO_MANA 2
+#define CURA_POCAO_VIDA 5
+#define CURA_POCAO_MANA 5
 
 typedef struct {
     char classe[20];
@@ -186,6 +186,17 @@ int carregarJogo(Save *save) {
 // 1 = save carregado com sucesso
 int game_over(Save *save) {
     int opcao;
+
+    system("cls");
+
+    printf("\n========================================\n");
+    printf("             FIM DA JORNADA\n");
+    printf("========================================\n\n");
+
+    escrever_lento("Voce foi derrotado...\n", 70);
+    escrever_lento("Sua jornada pela masmorra chegou ao fim.\n", 70);
+
+    aguardar_enter("Pressione ENTER para continuar...");
 
     system("cls");
 
