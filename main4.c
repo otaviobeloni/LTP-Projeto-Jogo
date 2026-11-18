@@ -768,7 +768,7 @@ void selecionar_classe(Player *player) {
             player->ATK = 5;
             player->DEF = 3;
             player->PER = 0;
-            player->mana_max = 5;
+            player->mana_max = 10;
             player->mana_atual = player->mana_max;
             player->ouro = 0;
             player->quant_chaves = 0;
