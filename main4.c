@@ -23,7 +23,6 @@ typedef struct {
     int quant_chaves;
     int pocoes_vida;
     int pocoes_mana;
-    int ataca_longa_dist;
     int dacio_sword;
     char ataque_esp[20];
 } Player;
@@ -257,7 +256,7 @@ int calcular_dano(int ataque) {
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
 	
-	int dano = player->ATK;
+	int dano = calcular_dano(player->ATK);
 	
 	inimigo -> vida_atual_inmg -= dano;
 	
@@ -407,7 +406,7 @@ int menu_ataque(Player *player, Inimigo *inimigo,
 
 // Ataque Inimigo
 void ataque_inmg(Player *player, Inimigo *inimigo) {
-    int dano = inimigo->ATK_inmg - player->DEF;
+    int dano = calcular_dano(inimigo->ATK_inmg) - (player->DEF);
 
     // DEF reduz o dano recebido, sem ser consumida.
     if (dano < 0) {
@@ -762,7 +761,6 @@ void selecionar_classe(Player *player) {
             player->mana_atual = player->mana_max;
             player->ouro = 0;
             player->quant_chaves = 0;
-            player->ataca_longa_dist = 0;
             player->dacio_sword = 0;
             player->pocoes_vida = 1;
             player->pocoes_mana = 0;
@@ -785,7 +783,6 @@ void selecionar_classe(Player *player) {
             player->mana_atual = player->mana_max;
             player->ouro = 0;
             player->quant_chaves = 0;
-            player->ataca_longa_dist = 1;
             player->dacio_sword = 0;
             player->pocoes_vida = 1;
             player->pocoes_mana = 1;
@@ -808,7 +805,6 @@ void selecionar_classe(Player *player) {
             player->mana_atual = player->mana_max;
             player->ouro = 5;
             player->quant_chaves = 1;
-            player->ataca_longa_dist = 1;
             player->dacio_sword = 0;
             player->pocoes_vida = 1;
             player->pocoes_mana = 1;
