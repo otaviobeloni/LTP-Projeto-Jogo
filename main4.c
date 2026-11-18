@@ -243,6 +243,29 @@ int game_over(Save *save) {
     }
 }
 
+// Tela apresentada quando o jogador derrota o Boss.
+void tela_vitoria(Player *player) {
+    system("cls");
+
+    printf("\n========================================\n");
+    printf("              FIM DA JORNADA\n");
+    printf("========================================\n\n");
+
+    escrever_lento("O ultimo golpe atinge o Boss...\n", 70);
+    escrever_lento("A criatura cambaleia e finalmente cai diante de voce.\n", 70);
+    escrever_lento("O chao para de tremer. O silencio toma conta da masmorra.\n\n", 70);
+
+    escrever_lento("Voce conseguiu, %s!\n", 100, player->classe);
+    escrever_lento("Depois de enfrentar todos os perigos, voce derrotou o chefe da masmorra.\n", 60);
+    escrever_lento("Sua jornada chega ao fim. Mas sua historia sera lembrada...\n\n", 60);
+
+    printf("========================================\n");
+    printf("             VOCE VENCEU!\n");
+    printf("========================================\n");
+
+    aguardar_enter("Pressione ENTER para encerrar sua jornada...");
+}
+
 // Ataque player
 
 void ataque_plyr (Player *player, Inimigo *inimigo){
@@ -1241,12 +1264,7 @@ void executar_jogo(Save *save) {
         printf("\n----------------------------------------\n");
 
         if (save->sala_atual == MAX_SALAS - 1) {
-            printf("\nVoce chegou ao final desta parte da masmorra!\n");
-            printf("O proximo desafio espera por voce...\n");
-
-            printf("\nPressione ENTER para encerrar...");
-            getchar();
-
+            tela_vitoria(&save->player);
             return;
         }
 
